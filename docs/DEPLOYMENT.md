@@ -60,6 +60,15 @@ The SQLite database is persisted in the named volume `event-data`. For PostgreSQ
    ```
 
    The temporary passwords are written to `/app/backend/.admin_credentials.txt` inside that container. Copy them into your private password manager, then change both at first login. They are not stored in git or Render environment variables.
+
+   If `setup_admins` reports that accounts already exist and you do not know the passwords, reset both with:
+
+   ```bash
+   cd /app/backend
+   python -m reset_admin_passwords --yes
+   ```
+
+   Copy the newly printed credentials from `/app/backend/.admin_credentials.txt` immediately — the container filesystem is ephemeral.
 7. Log in at `/organiser/login`, change both temporary passwords, approve test registrations and verify a round end-to-end.
 
 ### Render caveats

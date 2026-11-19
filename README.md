@@ -96,6 +96,14 @@ backend/.admin_credentials.txt
 
 Both accounts are forced to change their temporary password at first login at <http://localhost:8000/organiser/login>. No password appears in the frontend, public APIs, git history or application logs.
 
+If credentials are lost or `setup_admins` was skipped because accounts already existed, reset both passwords deliberately with:
+
+```powershell
+.\.venv\Scripts\python.exe -m reset_admin_passwords --yes
+```
+
+On Render, run `python -m reset_admin_passwords --yes` in the Render Shell and copy the new passwords immediately; the container file is ephemeral.
+
 ---
 
 ## 4. Local URLs
