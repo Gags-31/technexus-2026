@@ -39,7 +39,36 @@ The SQLite database is persisted in the named volume `event-data`. For PostgreSQ
 
 ## Render
 
-`render.yaml` defines a Docker web service with `generateValue: true` for `SECRET_KEY` and `sync: false` placeholders for database and domain configuration. Connect the repo, supply the environment values in the Render dashboard, then deploy.
+`render.yaml` defines a Docker web service with `generateValue: true` for `SECRET_KEY`, a `/api/health` health check and `sync: false` placeholders for database and domain configuration.
+
+### Steps
+
+1. In Render, create a **PostgreSQL** database (or use an external one). Copy its **Internal Database URL** / connection string.
+2. Create a new **Blueprint** from `https://github.com/Gags-31/technexus-2026`. Render detects `render.yaml`.
+3. When prompted, set:
+   - `DATABASE_URL` → the PostgreSQL connection string, in the form `postgresql+psycopg://user:password@host:5432/dbname`. Render often supplies `postgresql://...`; replace the scheme with `postgresql+psycopg://`.
+   - `CORS_ORIGINS` → `https://<your-service>.onrender.com` (comma-separated if you also use a custom domain).
+   - `TRUSTED_HOSTS` → `<your-service>.onrender.com`.
+   - `SECRET_KEY` is generated automatically by the blueprint.
+4. Deploy. The Dockerfile builds the frontend, installs backend dependencies and starts `uvicorn` on Render's injected `PORT`.
+5. Open `https://<your-service>.onrender.com/api/health` and confirm `{"ok": true}`.
+6. Open Render **Shell** on the web service and run the one-time admin setup:
+
+   ```bash
+   cd /app/backend
+   python -m setup_admins
+   ```
+
+   The temporary passwords are written to `/app/backend/.admin_credentials.txt` inside that container. Copy them into your private password manager, then change both at first login. They are not stored in git or Render environment variables.
+7. Log in at `/organiser/login`, change both temporary passwords, approve test registrations and verify a round end-to-end.
+
+### Render caveats
+
+- **Do not use SQLite on Render's local filesystem.** It is ephemeral and resets on deploy/restart. Use PostgreSQL as above.
+- Use a **paid always-on plan** (`starter` in the blueprint) for event day. Free instances spin down after inactivity, which breaks WebSocket lobbies and live timing.
+- Render's default request timeout is fine for REST, but WebSockets must be supported by the plan/proxy; verify a participant and organiser dashboard stay connected.
+- After the first deploy, changing `SECRET_KEY` invalidates all existing sessions and reset tokens.
+- If you add a custom domain, include both the Render URL and custom domain in `CORS_ORIGINS` and set `TRUSTED_HOSTS` accordingly.
 
 ## Generic PaaS
 
