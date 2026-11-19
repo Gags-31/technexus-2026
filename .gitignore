@@ -1,4 +1,4 @@
-# Python
+﻿# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
@@ -17,6 +17,7 @@ npm-debug.log*
 .env
 .env.*
 !.env.example
+.vercel/
 backend/.admin_credentials.txt
 backend/*.db
 backend/*.db-journal
@@ -30,3 +31,4 @@ backend/*.db-shm
 Thumbs.db
 .idea/
 .vscode/
+
