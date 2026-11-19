@@ -2,37 +2,22 @@
 from __future__ import annotations
 
 import asyncio
+import base64
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
-from pathlib import Path
 
 from fastapi import FastAPI, Request, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse, Response
 
 from .config import settings
 from .db import SessionLocal, init_db
+from .frontend_bundle import FRONTEND_FILES
 from .realtime import websocket_endpoint
 from .routers import admin_competition, admin_core, auth, participant, registration
 from .seed import seed_all
 from .services.core import settings_map
 from .services.rounds import check_auto_end
-
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-# Local development serves frontend/dist. On Vercel the built frontend is bundled
-# with the backend function so a single deployment serves both UI and API.
-FRONTEND_DIST = next(
-    (
-        candidate
-        for candidate in (
-            PROJECT_ROOT / "backend" / "frontend_dist",
-            PROJECT_ROOT / "frontend" / "dist",
-        )
-        if (candidate / "index.html").exists()
-    ),
-    PROJECT_ROOT / "frontend" / "dist",
-)
 
 
 @asynccontextmanager
@@ -141,15 +126,20 @@ app.include_router(admin_competition.router)
 
 app.add_api_websocket_route("/ws", websocket_endpoint)
 
-if (FRONTEND_DIST / "assets").exists():
-    app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="frontend-assets")
+def _frontend_response(key: str) -> Response | JSONResponse:
+    item = FRONTEND_FILES.get(key)
+    if item is None:
+        return JSONResponse(status_code=404, content={"detail": "Not found"})
+    return Response(content=base64.b64decode(item["data"]), media_type=item["content_type"])
+
+
+@app.get("/assets/{asset_path:path}", include_in_schema=False)
+def frontend_asset(asset_path: str):
+    return _frontend_response(f"assets/{asset_path}")
 
 
 @app.get("/{full_path:path}", include_in_schema=False)
 def spa_fallback(full_path: str):
     if full_path.startswith("api/") or full_path == "ws":
         return JSONResponse(status_code=404, content={"detail": "Not found"})
-    index = FRONTEND_DIST / "index.html"
-    if index.exists():
-        return FileResponse(index)
-    return JSONResponse(status_code=404, content={"detail": "Frontend build not found. Run npm run build in frontend/."})
+    return _frontend_response("index.html")
