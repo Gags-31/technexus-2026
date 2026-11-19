@@ -20,7 +20,19 @@ from .services.core import settings_map
 from .services.rounds import check_auto_end
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-FRONTEND_DIST = PROJECT_ROOT / "frontend" / "dist"
+# Local development serves frontend/dist. On Vercel the built frontend is bundled
+# with the backend function so a single deployment serves both UI and API.
+FRONTEND_DIST = next(
+    (
+        candidate
+        for candidate in (
+            PROJECT_ROOT / "backend" / "frontend_dist",
+            PROJECT_ROOT / "frontend" / "dist",
+        )
+        if (candidate / "index.html").exists()
+    ),
+    PROJECT_ROOT / "frontend" / "dist",
+)
 
 
 @asynccontextmanager
