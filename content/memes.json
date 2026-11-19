@@ -1,0 +1,110 @@
+[
+  {
+    "id": "M01",
+    "title": "The Debugger's Confidence",
+    "category": "Programming",
+    "top": "Me: 'It works on my machine.'",
+    "bottom": "My machine: 'We need to talk.'",
+    "theme": "cyan",
+    "glyph": "🐍"
+  },
+  {
+    "id": "M02",
+    "title": "One More Tiny Fix",
+    "category": "Programming",
+    "top": "My code after one more 'tiny fix'",
+    "bottom": "A new error nobody has ever searched.",
+    "theme": "violet",
+    "glyph": "🧩"
+  },
+  {
+    "id": "M03",
+    "title": "Prompt Expectations",
+    "category": "AI",
+    "top": "Me: 'Make it smart.'",
+    "bottom": "The model: 'Define smart.'",
+    "theme": "green",
+    "glyph": "🤖"
+  },
+  {
+    "id": "M04",
+    "title": "Confidence Interval",
+    "category": "AI",
+    "top": "AI: 'I'm 99% sure.'",
+    "bottom": "The 1%: 'I brought an edge case.'",
+    "theme": "amber",
+    "glyph": "🎯"
+  },
+  {
+    "id": "M05",
+    "title": "Elastic Budget",
+    "category": "Cloud",
+    "top": "Traffic doubled overnight.",
+    "bottom": "The cloud: 'Wonderful. The bill doubled too.'",
+    "theme": "blue",
+    "glyph": "🌤"
+  },
+  {
+    "id": "M06",
+    "title": "Region Hopping",
+    "category": "Cloud",
+    "top": "Ping from another continent.",
+    "bottom": "Latency: 'Thanks for the vacation.'",
+    "theme": "cyan",
+    "glyph": "🌐"
+  },
+  {
+    "id": "M07",
+    "title": "Where Clause Confidence",
+    "category": "SQL",
+    "top": "WHERE 1=1",
+    "bottom": "The entire table: 'We're all invited.'",
+    "theme": "amber",
+    "glyph": "🗃"
+  },
+  {
+    "id": "M08",
+    "title": "Index Envy",
+    "category": "SQL",
+    "top": "Other queries use the index.",
+    "bottom": "Mine: 'I'll take the scenic scan.'",
+    "theme": "green",
+    "glyph": "🔎"
+  },
+  {
+    "id": "M09",
+    "title": "RAM Negotiations",
+    "category": "OS",
+    "top": "12 tabs, 3 IDEs, one dream.",
+    "bottom": "OS: 'Pick two.'",
+    "theme": "violet",
+    "glyph": "💾"
+  },
+  {
+    "id": "M10",
+    "title": "Update Timing",
+    "category": "OS",
+    "top": "Restart later, said absolutely no server.",
+    "bottom": "OS: 'Now. I brought snacks.'",
+    "theme": "blue",
+    "glyph": "⏳"
+  },
+  {
+    "id": "M11",
+    "title": "Deadline Arithmetic",
+    "category": "College",
+    "top": "Syllabus: 'Two assignments this week.'",
+    "bottom": "Calendar: 'I see three midterms and a lab.'",
+    "theme": "cyan",
+    "glyph": "🎓"
+  },
+  {
+    "id": "M12",
+    "title": "Canteen Algorithm",
+    "category": "College",
+    "top": "Lecture ends in 5 minutes.",
+    "bottom": "The queue: 'Already sorted by hunger.'",
+    "theme": "green",
+    "glyph": "☕"
+  }
+]

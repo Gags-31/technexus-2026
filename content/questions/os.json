@@ -1,0 +1,542 @@
+[
+  {
+    "id": "OS-001",
+    "domain": "Operating Systems",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Which statement about threads and processes is correct?",
+    "options": [
+      "Each thread in a process has its own independent virtual address space.",
+      "Threads within the same process share the address space and file descriptors, but keep separate registers, program counters, and stacks.",
+      "A context switch between two threads of the same process always requires reloading the page-table base register.",
+      "A process containing user-level threads can never be preempted by the operating system."
+    ],
+    "correct_index": 1,
+    "explanation": "Threads in one process share code, data, heap, and OS resources such as open file descriptors, while each owns a program counter, register set, and stack so it can be scheduled independently. Because the address space is shared, switching between threads of the same process does not require reloading the page-table base register, unlike a full process switch. Kernel-level threads are visible to the scheduler and are preemptible; with user-level threads the kernel schedules only the underlying process.",
+    "hint": "Separate the minimal state needed to resume execution from the memory context that defines the address space; sharing the latter is what makes threads lightweight.",
+    "reference": "Concept: Process vs thread model | Scenario: Comparing resource ownership and scheduling units inside one application"
+  },
+  {
+    "id": "OS-002",
+    "domain": "Operating Systems",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "What does the operating system save during a context switch from one process to another?",
+    "options": [
+      "Only the program counter and the stack pointer.",
+      "The entire contents of main memory to the swap partition.",
+      "The process control block, including registers, program counter, process state, and memory-management registers.",
+      "The file-system cache and the full contents of every open file."
+    ],
+    "correct_index": 2,
+    "explanation": "The outgoing process's execution context is stored in its process control block: program counter, general-purpose registers, stack pointer, state, and memory-management registers such as the page-table base. The incoming process's saved context is then loaded so execution resumes exactly where it stopped. The memory image itself remains in RAM; writing it to disk is swapping, not context switching.",
+    "hint": "Distinguish the small hardware state required to resume an instruction stream from the bulk resident data that does not need to be copied on every switch.",
+    "reference": "Concept: Context switching and the PCB | Scenario: Saving and restoring execution state on a CPU dispatch"
+  },
+  {
+    "id": "OS-003",
+    "domain": "Operating Systems",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Three processes arrive at time 0 with burst times `P1 = 5 ms`, `P2 = 2 ms`, and `P3 = 3 ms`. Under non-preemptive SJF, what is the average waiting time?",
+    "options": [
+      "7/3 ms, approximately 2.33 ms.",
+      "4 ms.",
+      "10/3 ms, approximately 3.33 ms.",
+      "3 ms."
+    ],
+    "correct_index": 0,
+    "explanation": "Non-preemptive SJF selects the shortest available burst each time, giving the order `P2` (2 ms), `P3` (3 ms), then `P1` (5 ms). Their waiting times are 0, 2, and 5 ms, summing to 7 ms. The average is therefore 7/3 ms, about 2.33 ms, which is optimal for average waiting time when all jobs are ready at time 0.",
+    "hint": "Order the jobs by burst length before summing the time each spends waiting; a shorter job should never wait behind a longer one in this policy.",
+    "reference": "Concept: Shortest Job First scheduling | Scenario: Computing average waiting time from known burst times"
+  },
+  {
+    "id": "OS-004",
+    "domain": "Operating Systems",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Which of the following is NOT one of the four necessary conditions for deadlock (the Coffman conditions)?",
+    "options": [
+      "Mutual exclusion.",
+      "Hold and wait.",
+      "Circular wait.",
+      "Preemption of resources."
+    ],
+    "correct_index": 3,
+    "explanation": "The four Coffman conditions are mutual exclusion, hold-and-wait, no preemption, and circular wait; all must hold simultaneously for deadlock. 'Preemption of resources' is the opposite of the required no-preemption condition. If the system could forcibly take a resource away, a deadlocked cycle could be broken and could not persist.",
+    "hint": "Ask which listed property would actively resolve a standoff if it were permitted, rather than being a condition that must be forbidden.",
+    "reference": "Concept: Necessary deadlock conditions | Scenario: Classifying properties of a resource-allocation standoff"
+  },
+  {
+    "id": "OS-005",
+    "domain": "Operating Systems",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "What happens when a process references a page whose valid/invalid bit in the page table is marked invalid?",
+    "options": [
+      "The process is terminated immediately without further checks.",
+      "A page-fault trap occurs; the OS checks whether the access is legal and may load the page from backing store.",
+      "The TLB is flushed and execution continues with the same physical frame.",
+      "The page is silently mapped to a zeroed frame without any operating-system involvement."
+    ],
+    "correct_index": 1,
+    "explanation": "An invalid bit raises a page-fault exception, transferring control to the OS. The OS verifies that the address belongs to the process; if the page is legal but not resident, it allocates a frame, reads the page from disk, updates the table, and restarts the faulting instruction. An illegal access, such as writing a read-only page, instead delivers a signal like `SIGSEGV`. Even a demand-zero fault is handled by the OS rather than silently.",
+    "hint": "The hardware cannot distinguish an illegal reference from a legal reference to a not-yet-loaded page, so it must hand the decision to software.",
+    "reference": "Concept: Demand paging and page faults | Scenario: Handling an invalid page-table entry on a memory reference"
+  },
+  {
+    "id": "OS-006",
+    "domain": "Operating Systems",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "What is the key difference between paging and segmentation?",
+    "options": [
+      "Paging uses fixed-size blocks, while segmentation uses variable-sized logical units.",
+      "Paging requires a segment table, while segmentation requires a page table.",
+      "Segmentation always causes internal fragmentation, while paging causes external fragmentation.",
+      "Paging is used only for virtual memory, while segmentation is used only for physical memory."
+    ],
+    "correct_index": 0,
+    "explanation": "Paging divides logical and physical memory into fixed-size pages and frames, eliminating external fragmentation but potentially wasting space in the final page. Segmentation divides memory into variable-sized units such as code, data, and stack that mirror the programmer's view, which can reintroduce external fragmentation. The two mechanisms can also be combined in a segmented-paging scheme.",
+    "hint": "Focus on whether region boundaries are imposed by hardware at a fixed size or derived from the program's logical structure.",
+    "reference": "Concept: Paging versus segmentation | Scenario: Comparing memory partition strategies and fragmentation"
+  },
+  {
+    "id": "OS-007",
+    "domain": "Operating Systems",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "In Round Robin scheduling, if the time quantum is larger than every process burst, the algorithm behaves like which policy?",
+    "options": [
+      "Shortest Job First.",
+      "Priority scheduling.",
+      "First-Come, First-Served.",
+      "Multilevel Feedback Queue."
+    ],
+    "correct_index": 2,
+    "explanation": "When the quantum exceeds all burst times, no running process is preempted before it finishes. Processes therefore execute to completion in arrival order, which is exactly FCFS behavior. At the opposite extreme, an extremely small quantum approaches processor sharing but incurs heavy context-switch overhead.",
+    "hint": "Consider what happens to preemption when no process ever exhausts its allotted slice before completing.",
+    "reference": "Concept: Round Robin time quantum | Scenario: Analyzing degenerate behavior at extreme quantum sizes"
+  },
+  {
+    "id": "OS-008",
+    "domain": "Operating Systems",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "A binary semaphore is initialized to 1. What happens when a `wait()` (P) operation is executed while its value is 0?",
+    "options": [
+      "The value is set to 1 and the caller continues.",
+      "The value is decremented to -1 and the caller continues.",
+      "The kernel raises a fatal exception immediately.",
+      "The caller blocks until another process executes `signal()` (V)."
+    ],
+    "correct_index": 3,
+    "explanation": "A binary semaphore acts as a mutual-exclusion gate with values restricted to 0 and 1. When the value is 0 the gate is closed, so `wait()` places the caller in the semaphore's wait queue and blocks it. A later `signal()` opens the gate and wakes a waiting process, which is the mechanism that enforces mutual exclusion.",
+    "hint": "Think of the semaphore as a gate whose current holder is the only party that can reopen it for someone else.",
+    "reference": "Concept: Binary semaphores and blocking synchronization | Scenario: Contending for a single shared critical section"
+  },
+  {
+    "id": "OS-009",
+    "domain": "Operating Systems",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Which statement best describes the primary benefit of demand paging in a virtual-memory system?",
+    "options": [
+      "It guarantees that every page of a running process stays in memory at all times.",
+      "It lets a process run with only part of its address space resident, fetching pages when they are referenced.",
+      "It removes the need for a page table entirely.",
+      "It converts all disk I/O into CPU register operations."
+    ],
+    "correct_index": 1,
+    "explanation": "Demand paging loads a page only when a reference to it occurs, so a process need not be fully resident before it starts. This permits logical address spaces larger than physical memory, raises the achievable degree of multiprogramming, and avoids reading pages that are never touched. It depends on valid bits, page-fault handling, and backing store.",
+    "hint": "Consider what the system gains by deferring work until the first actual reference instead of loading everything up front.",
+    "reference": "Concept: Virtual memory and demand paging | Scenario: Running a process larger than available RAM"
+  },
+  {
+    "id": "OS-010",
+    "domain": "Operating Systems",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "In a typical Unix-style file system, what does an inode store?",
+    "options": [
+      "Metadata such as permissions, size, timestamps, and pointers to data blocks, but not the file name.",
+      "The file name together with the complete file contents.",
+      "Only the physical geometry of the disk drive.",
+      "The page table of the process that most recently opened the file."
+    ],
+    "correct_index": 0,
+    "explanation": "An inode records a file object's mode, owner and group IDs, size, timestamps, link count, and the addresses of its data blocks. Human-readable names live in directory entries that map a name to an inode number, so a name is not part of the inode itself. This separation is why multiple hard links can point at one inode.",
+    "hint": "Separate a file's persistent identity and attributes from the different directory names that can refer to it.",
+    "reference": "Concept: Inodes and directory entries | Scenario: Locating file metadata during a name lookup"
+  },
+  {
+    "id": "OS-011",
+    "domain": "Operating Systems",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "`P1` arrives at 0 with burst 7, `P2` arrives at 2 with burst 4, and `P3` arrives at 4 with burst 1. A diagram-in-words Gantt chart for non-preemptive SJF is `P1[0-7] -> P3[7-8] -> P2[8-12]`. What is the waiting time of `P2`?",
+    "options": [
+      "2 ms.",
+      "4 ms.",
+      "6 ms.",
+      "10 ms."
+    ],
+    "correct_index": 2,
+    "explanation": "Waiting time is the moment a process first receives the CPU minus its arrival time. `P2` arrives at 2 and starts at 8, so it waits 6 ms. Its turnaround is 12 - 2 = 10 ms, and because it is never preempted its response time is also 6 ms. The given chart is consistent: at time 7 the pending jobs are `P3` with burst 1 and `P2` with burst 4.",
+    "hint": "Waiting excludes time spent executing; subtract arrival from the start moment rather than from the completion moment.",
+    "reference": "Concept: Gantt charts and waiting time | Scenario: Interpreting a non-preemptive SJF timeline"
+  },
+  {
+    "id": "OS-012",
+    "domain": "Operating Systems",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "Processes `A`, `B`, and `C` arrive at time 0 in that order with bursts 4, 3, and 2. With Round Robin quantum 2, the diagram-in-words timeline is `A[0-2] -> B[2-4] -> C[4-6] -> A[6-8] -> B[8-9]`. What is the turnaround time of `C`?",
+    "options": [
+      "2 ms.",
+      "4 ms.",
+      "8 ms.",
+      "6 ms."
+    ],
+    "correct_index": 3,
+    "explanation": "From the timeline, `C` completes at time 6 and arrived at 0, so its turnaround time is 6 ms. It waited through `A` and `B` using one quantum each, giving a waiting time and response time of 4 ms. Note that `A` needs two slices (0-2 and 6-8) because its burst is 4.",
+    "hint": "Turnaround is measured from arrival to completion, so find the final segment belonging to the process in the timeline.",
+    "reference": "Concept: Round Robin timeline analysis | Scenario: Deriving turnaround from a quantum-based schedule"
+  },
+  {
+    "id": "OS-013",
+    "domain": "Operating Systems",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A system uses 4 KB pages and 32-bit virtual addresses. How many entries does a single-level page table need to cover the address space, assuming one entry per virtual page?",
+    "options": [
+      "2^20 = 1,048,576 entries.",
+      "2^12 = 4,096 entries.",
+      "2^10 = 1,024 entries.",
+      "2^32 entries."
+    ],
+    "correct_index": 0,
+    "explanation": "A 32-bit address space spans 2^32 bytes and a 4 KB page is 2^12 bytes, so there are 2^(32-12) = 2^20 virtual pages. One page-table entry per page means about 1.05 million entries. At 4 bytes per entry that is roughly 4 MB per process, which motivates multi-level or inverted page tables.",
+    "hint": "Subtract the page-offset bit count from the address width to obtain the virtual page-number bits, then exponentiate.",
+    "reference": "Concept: Page table sizing | Scenario: Translating a 32-bit address with 4 KB pages"
+  },
+  {
+    "id": "OS-014",
+    "domain": "Operating Systems",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "For reference string `1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5`, FIFO causes 9 page faults with 3 frames and 10 with 4 frames. What phenomenon is this?",
+    "options": [
+      "Thrashing.",
+      "Belady's anomaly.",
+      "Internal fragmentation.",
+      "Compaction."
+    ],
+    "correct_index": 1,
+    "explanation": "Belady's anomaly is the counterintuitive increase in page faults when a FIFO system is given more frames. FIFO lacks the stack property: the pages resident with m frames need not be a subset of those resident with m+1 frames. Stack algorithms such as LRU and Optimal cannot exhibit this behavior.",
+    "hint": "Ask which policy lacks the stack property, so that adding a frame does not guarantee a superset of the previously resident pages.",
+    "reference": "Concept: FIFO anomaly and stack algorithms | Scenario: Comparing fault counts across frame allocations"
+  },
+  {
+    "id": "OS-015",
+    "domain": "Operating Systems",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "Memory holes in increasing address order are `400 KB`, `100 KB`, `300 KB`, and `200 KB`. A 210 KB process arrives. Which hole does best-fit select, and how much is left over?",
+    "options": [
+      "The `400 KB` hole, leaving 190 KB.",
+      "The `200 KB` hole, which cannot hold the process.",
+      "The `100 KB` hole, leaving 110 KB.",
+      "The `300 KB` hole, leaving 90 KB."
+    ],
+    "correct_index": 3,
+    "explanation": "Best-fit examines every hole and picks the smallest one large enough for the request. The qualifying holes are 400 KB and 300 KB, so 300 KB is chosen and leaves a 90 KB fragment. First-fit would instead take the 400 KB hole because it is the first adequate hole in address order; best-fit saves larger holes but requires a full free-list search.",
+    "hint": "Filter to holes that are large enough first, then choose the one wasting the least; do not stop at the first candidate.",
+    "reference": "Concept: Dynamic contiguous allocation policies | Scenario: Placing a process into an ordered free-hole list"
+  },
+  {
+    "id": "OS-016",
+    "domain": "Operating Systems",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A priority scheduler treats smaller numbers as higher priority. `P1` (priority 5, burst 8) starts at time 0, and at time 2 `P2` (priority 2, burst 4) arrives. Under preemptive priority scheduling, when does `P2` finish?",
+    "options": [
+      "At time 6.",
+      "At time 4.",
+      "At time 8.",
+      "At time 10."
+    ],
+    "correct_index": 0,
+    "explanation": "Because smaller numbers mean higher priority, the arriving `P2` outranks the running `P1` and seizes the CPU at time 2. `P2` needs 4 ms and runs from 2 to 6 without interruption. `P1` then resumes with 6 ms remaining and completes at 12; a steady stream of higher-priority arrivals could starve `P1`.",
+    "hint": "Verify the priority convention before deciding whether a newcomer may take the CPU away from the incumbent mid-burst.",
+    "reference": "Concept: Preemptive priority scheduling | Scenario: Handling a higher-priority arrival during execution"
+  },
+  {
+    "id": "OS-017",
+    "domain": "Operating Systems",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "Which strategy prevents deadlock by making at least one of the four necessary conditions impossible to satisfy?",
+    "options": [
+      "Deadlock detection followed by process termination.",
+      "The Banker's algorithm.",
+      "Deadlock prevention.",
+      "The ostrich algorithm."
+    ],
+    "correct_index": 2,
+    "explanation": "Deadlock prevention structures requests so a Coffman condition cannot arise, for example by requiring all resources in one atomic request to break hold-and-wait, or by allowing preemption to break no-preemption. Deadlock avoidance, including the Banker's algorithm, permits the conditions but refuses requests that would lead to an unsafe state. Detection allows deadlock to occur and then recovers, while the ostrich algorithm ignores it.",
+    "hint": "Distinguish policies that make a condition structurally impossible from policies that merely decline to enter a risky state.",
+    "reference": "Concept: Prevention versus avoidance versus detection | Scenario: Choosing a deadlock-handling policy"
+  },
+  {
+    "id": "OS-018",
+    "domain": "Operating Systems",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "What is the effect of a TLB miss during address translation?",
+    "options": [
+      "The accessing process is terminated for an illegal address.",
+      "The page table in memory, possibly via a higher-level TLB, is consulted; a found mapping is installed and the access proceeds.",
+      "The referred page is immediately written out to the swap device.",
+      "The virtual address is converted to a physical address with no further table lookup."
+    ],
+    "correct_index": 1,
+    "explanation": "The TLB is a small fast cache of recent virtual-to-physical translations. On a miss, hardware or the OS walks the page table, installs the translation in the TLB, and restarts the reference. A TLB miss is distinct from a page fault because the page may already be resident; larger page sizes are often used to reduce miss rates.",
+    "hint": "Separate the caching layer from the authoritative mapping structure; a cache miss does not imply the mapping is absent from memory.",
+    "reference": "Concept: Translation lookaside buffer | Scenario: Handling a missing cached virtual-to-physical mapping"
+  },
+  {
+    "id": "OS-019",
+    "domain": "Operating Systems",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A database service stops making progress. Logs show transaction `T1` holds row lock `X` and waits for `Y`; `T2` holds `Y` and waits for `Z`; `T3` holds `Z` and waits for `X`. No timeout fires and no state changes occur. What is the diagnosis and minimal recovery?",
+    "options": [
+      "Livelock; have all transactions retry with exponential backoff.",
+      "Starvation; raise the priority of `T3`.",
+      "Thrashing; enlarge the buffer pool with more RAM.",
+      "Deadlock with a circular chain `T1 -> T2 -> T3 -> T1`; roll back or abort at least one transaction to break the cycle."
+    ],
+    "correct_index": 3,
+    "explanation": "The wait-for graph forms a cycle: each transaction holds a resource another needs while waiting for one held elsewhere. Combined with mutual exclusion, hold-and-wait, and no preemption, this is a genuine deadlock. It is not livelock, where processes keep changing state without progress, nor starvation. Recovery requires aborting or rolling back a participant, or forcibly preempting a lock.",
+    "hint": "Draw the wait-for graph and look for a cycle, then identify the single action that would release at least one needed resource.",
+    "reference": "Concept: Deadlock detection via wait-for graphs | Scenario: Diagnosing a hung multi-transaction database service"
+  },
+  {
+    "id": "OS-020",
+    "domain": "Operating Systems",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A host shows CPU utilization at 12%, disk latency spiking, and more than 500 page faults per second. The active processes' combined working set is 3.2 GB while only 1.5 GB of frames are available. What is happening and what is the most direct remedy?",
+    "options": [
+      "Thrashing; reduce the degree of multiprogramming or add memory so the working set fits.",
+      "Belady's anomaly; replace LRU with FIFO.",
+      "Priority inversion; implement priority inheritance.",
+      "External fragmentation; run an online disk defragmenter."
+    ],
+    "correct_index": 0,
+    "explanation": "When the aggregate working set exceeds available frames, processes fault before they can reuse recently touched pages and spend most of their time waiting on disk. The telltale signs are plummeting CPU utilization with intense paging I/O, which defines thrashing. Suspending some processes or increasing memory shrinks demand or raises supply; switching to FIFO would likely make faults worse.",
+    "hint": "Compare aggregate demand (working set) with supply (frames), and interpret low CPU together with high I/O as the CPU waiting for pages.",
+    "reference": "Concept: Thrashing and working-set model | Scenario: Diagnosing a paging-collapse performance incident"
+  },
+  {
+    "id": "OS-021",
+    "domain": "Operating Systems",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "Low-priority thread `L` holds mutex `M`. High-priority thread `H` blocks on `M`, while medium-priority thread `M2` runs continuously and never blocks. `H` waits far longer than the critical section should require. What is the problem and the standard fix?",
+    "options": [
+      "Deadlock, because `H` holds a lock that `L` needs.",
+      "Priority inversion; use priority inheritance or priority ceiling so `L` temporarily runs above `M2`.",
+      "Starvation from an oversized Round Robin quantum; shorten the quantum.",
+      "A TLB shootdown storm; use larger pages."
+    ],
+    "correct_index": 1,
+    "explanation": "Priority inversion occurs when a high-priority thread is indirectly held up by a lower-priority lock owner, and a medium-priority thread keeps that owner off the CPU. Priority inheritance temporarily raises `L` to `H`'s priority while `M` is held so the critical section drains quickly. The priority ceiling protocol is an alternative that can also prevent deadlock.",
+    "hint": "Look for an intermediate-priority task that is not waiting on the mutex yet prevents the lock holder from ever running.",
+    "reference": "Concept: Priority inversion and inheritance | Scenario: Debugging an unbounded high-priority blocking delay"
+  },
+  {
+    "id": "OS-022",
+    "domain": "Operating Systems",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "In an MLFQ, a CPU-bound batch job never finishes: each time it drops to a lower queue, new short interactive jobs refill the top queue, which is always drained first. Which MLFQ rule most directly addresses this symptom?",
+    "options": [
+      "Never change a job's priority after admission.",
+      "Use identical time quanta in every queue.",
+      "Periodically boost all jobs back to the highest-priority queue.",
+      "Replace round robin with FIFO inside each queue."
+    ],
+    "correct_index": 2,
+    "explanation": "Strict priority scheduling lets a continuous arrival stream of short jobs starve the lower queues indefinitely. Periodic priority boosting bounds that wait by moving every job back to the top queue at fixed intervals, guaranteeing each receives CPU time. Typical MLFQ designs also account for cumulative CPU usage to prevent gaming and use longer quanta at lower priority levels.",
+    "hint": "Ask which mechanism puts an upper bound on how long any job can be ignored, regardless of how many newcomers arrive.",
+    "reference": "Concept: MLFQ starvation and priority boosts | Scenario: Investigating a batch job that never completes"
+  },
+  {
+    "id": "OS-023",
+    "domain": "Operating Systems",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A web server reports poor p99 latency with only 40% CPU use. Tracing shows roughly 120,000 voluntary context switches per second and most worker threads blocked in synchronous `read()` calls against a slow backend. What is the most likely cause?",
+    "options": [
+      "Excessive blocking I/O parking threads and forcing frequent context switches; use async I/O or a right-sized bounded worker pool.",
+      "Insufficient free space on the log volume.",
+      "A paging storm caused by Belady's anomaly.",
+      "CPU throttling induced by priority inheritance."
+    ],
+    "correct_index": 0,
+    "explanation": "A very high voluntary context-switch rate with low CPU utilization means threads are repeatedly yielding the processor on their own rather than doing useful work. Synchronous reads against a slow backend park each worker, and an oversized pool multiplies switching overhead and cache pollution. Event-driven or asynchronous I/O, or a carefully bounded pool, reduces both wakeups and tail latency.",
+    "hint": "Voluntary switches mean threads gave up the CPU themselves; identify what they are waiting for before blaming the scheduler.",
+    "reference": "Concept: Blocking I/O and context-switch overhead | Scenario: Root-causing high tail latency in a service"
+  },
+  {
+    "id": "OS-024",
+    "domain": "Operating Systems",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "After an unclean shutdown, `fsck` reports orphaned inodes and a directory entry pointing to a block already marked free. Which invariant was violated, and what is the purpose of a journal?",
+    "options": [
+      "The page-table valid bit; a journal flushes the TLB on commit.",
+      "The disk scheduler's elevator property; a journal reorders seeks for throughput.",
+      "The working-set bound; a journal increases available RAM.",
+      "Consistency among directory entries, inodes, and allocation bitmaps; a journal logs updates atomically so they can be replayed or rolled back."
+    ],
+    "correct_index": 3,
+    "explanation": "Creating a file requires an ordered sequence of metadata updates: allocate a block, update the inode, add the directory entry, and mark the bitmap. A crash between steps leaves the on-disk structures inconsistent, which `fsck` repairs by scanning and rebuilding. Journaling records intent in a log and replays committed transactions, making the multi-step update atomic and avoiding a full consistency scan.",
+    "hint": "Think about the ordered metadata update sequence and what happens if power fails between two of its steps.",
+    "reference": "Concept: File-system consistency and journaling | Scenario: Recovering metadata after an unclean shutdown"
+  },
+  {
+    "id": "OS-025",
+    "domain": "Operating Systems",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A disk queue holds cylinder requests `11, 1, 36, 16, 34, 9` and the head starts at cylinder `15`. Under SSTF, what is the total head movement before the queue empties?",
+    "options": [
+      "60 cylinders.",
+      "51 cylinders.",
+      "112 cylinders.",
+      "45 cylinders."
+    ],
+    "correct_index": 1,
+    "explanation": "SSTF repeatedly takes the nearest pending request: `15 -> 16` (1), `16 -> 11` (5), `11 -> 9` (2), `9 -> 1` (8), `1 -> 34` (33), and `34 -> 36` (2), totaling 51 cylinders. FCFS on the same queue moves 112 cylinders and a simple SCAN pass moves 60. SSTF reduces average seek but can starve distant requests during steady nearby traffic.",
+    "hint": "At each step compare only the still-pending requests against the current head and accumulate absolute cylinder differences.",
+    "reference": "Concept: SSTF disk scheduling | Scenario: Computing total seek distance from a given queue and head position"
+  },
+  {
+    "id": "OS-026",
+    "domain": "Operating Systems",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "`P1` arrives at 0 with burst 8, `P2` at 1 with burst 4, `P3` at 2 with burst 2, and `P4` at 3 with burst 1. Under preemptive SJF (SRTF), what are the average waiting time and average turnaround time?",
+    "options": [
+      "Average waiting 3.25 ms; average turnaround 7.0 ms.",
+      "Average waiting 2.0 ms; average turnaround 5.5 ms.",
+      "Average waiting 2.75 ms; average turnaround 6.5 ms.",
+      "Average waiting 1.75 ms; average turnaround 5.0 ms."
+    ],
+    "correct_index": 2,
+    "explanation": "The SRTF schedule is `P1[0-1] -> P2[1-2] -> P3[2-3] -> P4[3-4] -> P3[4-5] -> P2[5-8] -> P1[8-15]`. Completion times for `P1..P4` are 15, 8, 5, and 4, giving turnarounds 15, 7, 3, 1 (average 6.5 ms). Waiting times of 7, 3, 1, 0 average 2.75 ms; the tie at time 3 does not change these aggregates.",
+    "hint": "Re-examine the shortest remaining burst at every arrival, and use the identity that waiting equals turnaround minus service time.",
+    "reference": "Concept: SRTF timing calculations | Scenario: Deriving aggregate metrics from a preemptive schedule"
+  },
+  {
+    "id": "OS-027",
+    "domain": "Operating Systems",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "With 4 initially empty frames and reference string `1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5`, how many page faults does LRU incur?",
+    "options": [
+      "8 page faults.",
+      "12 page faults.",
+      "10 page faults.",
+      "9 page faults."
+    ],
+    "correct_index": 0,
+    "explanation": "Simulating LRU: the first four distinct pages fault, accesses to `1` and `2` hit, `5` evicts `3`, the next `1` and `2` hit, `3` evicts `4`, `4` evicts `5`, and `5` evicts `1`, for 8 faults. FIFO on this string faults 10 times with 4 frames but only 9 times with 3 frames, the classic Belady example. LRU's stack property rules out such anomalies.",
+    "hint": "Maintain an explicit recency order: promote a page on every hit and evict the least recently used frame only on a miss.",
+    "reference": "Concept: LRU page replacement simulation | Scenario: Counting faults for a known reference string"
+  },
+  {
+    "id": "OS-028",
+    "domain": "Operating Systems",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "Five processes `P0` through `P4` share resources `A`, `B`, `C`. `Available = (3, 3, 2)`. Allocations are `P0=(0,1,0)`, `P1=(2,0,0)`, `P2=(3,0,2)`, `P3=(2,1,1)`, `P4=(0,0,2)` and remaining needs are `P0=(7,4,3)`, `P1=(1,2,2)`, `P2=(6,0,0)`, `P3=(0,1,1)`, `P4=(4,3,1)`. Which statement is correct?",
+    "options": [
+      "The state is unsafe because no process can complete.",
+      "The state is safe with sequence `<P0, P1, P2, P3, P4>`.",
+      "The state is safe with sequence `<P2, P0, P4, P1, P3>`.",
+      "The state is safe with sequence `<P1, P3, P4, P0, P2>`."
+    ],
+    "correct_index": 3,
+    "explanation": "Start with Work = (3, 3, 2). `P1` need (1, 2, 2) fits, giving (5, 3, 2); `P3` need (0, 1, 1) gives (7, 4, 3); `P4` need (4, 3, 1) gives (7, 4, 5); `P0` need (7, 4, 3) gives (7, 5, 5); `P2` need (6, 0, 0) gives (10, 5, 7). Every process can finish in that order, so `<P1, P3, P4, P0, P2>` is a valid safe sequence. The Banker's algorithm grants a request only if some safe sequence still exists afterward.",
+    "hint": "Repeatedly match remaining needs against the current work vector and return each finishing process's allocation to the pool; you need not find every possible ordering.",
+    "reference": "Concept: Banker's algorithm safety test | Scenario: Verifying a multi-resource allocation state"
+  },
+  {
+    "id": "OS-029",
+    "domain": "Operating Systems",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "A machine has a TLB hit ratio of 0.9, a 100 ns memory access time, negligible TLB lookup time, a page-fault rate of 0.001, and 8 ms to service a fault. What is the effective memory access time?",
+    "options": [
+      "110 ns.",
+      "8110 ns, approximately 8.11 us.",
+      "8010 ns, approximately 8.01 us.",
+      "900 ns."
+    ],
+    "correct_index": 1,
+    "explanation": "First compute the fault-free access: a TLB hit costs 100 ns, while a miss costs 100 ns for the page-table read plus 100 ns for data, so 0.9(100) + 0.1(200) = 110 ns. Then add the amortized fault cost 0.001 x 8 ms = 8000 ns. The total is about 8110 ns, showing that even a 0.1% fault rate dominates TLB effects because disk service is orders of magnitude slower.",
+    "hint": "Compute the cache expectation and the fault expectation separately, convert every term to nanoseconds, and then combine them.",
+    "reference": "Concept: Effective access time with TLB and paging | Scenario: Combining cache hits, misses, and page-fault penalties"
+  },
+  {
+    "id": "OS-030",
+    "domain": "Operating Systems",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "A containerized application fails when opening 2000 files even though the host has abundant file descriptors, and values under `/proc/sys` differ from the host's. Which explanation is most accurate?",
+    "options": [
+      "Containers emulate a complete CPU instruction set, so all resource limits are synthetic.",
+      "The container boots a separate guest kernel, so host limits never apply to it.",
+      "Containers share the host kernel but are isolated by namespaces and constrained by cgroups; the runtime's limits and namespaced procfs determine what the process sees.",
+      "Virtualized page-table base registers force a TLB flush on every container system call."
+    ],
+    "correct_index": 2,
+    "explanation": "A container is not a virtual machine: it runs directly on the host kernel with isolation from namespaces for PID, mount, network, and other views, and resource control through cgroups. A descriptor failure can therefore stem from runtime-imposed rlimits or cgroup settings plus a namespaced `/proc`, independent of host-wide capacity. A VM, by contrast, runs a distinct guest kernel on a hypervisor.",
+    "hint": "Ask whether the workload has its own kernel or merely an isolated view of the host kernel, and where resource controls are attached in each model.",
+    "reference": "Concept: Containers versus virtual machines | Scenario: Debugging unexpected per-container resource limits"
+  }
+]

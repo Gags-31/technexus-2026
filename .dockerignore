@@ -1,0 +1,12 @@
+**/node_modules
+**/.venv
+**/dist
+**/__pycache__
+**/.pytest_cache
+**/*.pyc
+**/.env
+**/.admin_credentials.txt
+**/*.db
+**/*.db-wal
+**/*.db-shm
+.git

@@ -1,0 +1,17 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: sqlite:////data/technexus.db
+      SECRET_KEY: ${SECRET_KEY:-change-me-before-the-event}
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8000}
+      TRUSTED_HOSTS: ${TRUSTED_HOSTS:-*}
+    volumes:
+      - event-data:/data
+    restart: unless-stopped
+
+volumes:
+  event-data:

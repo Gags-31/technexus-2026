@@ -1,0 +1,542 @@
+[
+  {
+    "id": "DB-001",
+    "domain": "DBMS",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "In formal relational-model terminology, a table's header defines its schema while the collection of rows stored at a point in time is called what?",
+    "options": [
+      "A domain",
+      "A relation (instance)",
+      "A schema definition",
+      "A candidate key"
+    ],
+    "correct_index": 1,
+    "explanation": "In the relational model, a relation is a set of tuples, and the current set of rows is the relation's instance, meaning its value at a given time. A domain is the underlying set of permitted values for an attribute, and a schema is the structural definition of relation name plus attribute names and types. A candidate key is a minimal set of attributes that uniquely identifies tuples, not the set of rows itself.",
+    "hint": "Distinguish the time-varying content of a table from the static definition of its columns and from the pool of values a column may draw from.",
+    "reference": "Concept: Relational model - relation, tuple, domain, schema | Scenario: Table schema versus its stored rows"
+  },
+  {
+    "id": "DB-002",
+    "domain": "DBMS",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Which key in a relational table is deliberately chosen to uniquely identify every row and is automatically enforced as NOT NULL and unique?",
+    "options": [
+      "Candidate key",
+      "Foreign key",
+      "Primary key",
+      "Alternate key"
+    ],
+    "correct_index": 2,
+    "explanation": "The primary key is the candidate key selected as the official row identifier; most DBMSs enforce uniqueness and implicitly add a NOT NULL constraint to its columns. Other candidate keys, called alternate keys, are also unique but are not chosen as the main identifier and may allow nulls unless explicitly constrained. A foreign key references a key in another table and need not be unique at all.",
+    "hint": "Focus on the key that is designated as the main identifier and carries an implicit null prohibition, not merely any unique combination.",
+    "reference": "Concept: Primary key vs candidate and foreign keys | Scenario: Choosing a unique non-null row identifier"
+  },
+  {
+    "id": "DB-003",
+    "domain": "DBMS",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Which SQL statement is used to add new rows to an existing table?",
+    "options": [
+      "INSERT",
+      "UPDATE",
+      "ALTER",
+      "CREATE"
+    ],
+    "correct_index": 0,
+    "explanation": "INSERT is the DML statement that adds one or more rows to a table, for example INSERT INTO Students VALUES (...). UPDATE modifies existing rows, while ALTER and CREATE are DDL statements that change or create schema objects rather than manipulating row data.",
+    "hint": "Separate statements that manipulate row data from those that change the table definition, then identify which one creates new rows specifically.",
+    "reference": "Concept: SQL DML vs DDL - INSERT | Scenario: Adding a new student record"
+  },
+  {
+    "id": "DB-004",
+    "domain": "DBMS",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "You need a result containing every customer, showing their orders where matches exist and NULL for customers with no orders. Which join produces this?",
+    "options": [
+      "INNER JOIN",
+      "RIGHT JOIN",
+      "CROSS JOIN",
+      "LEFT OUTER JOIN"
+    ],
+    "correct_index": 3,
+    "explanation": "A LEFT OUTER JOIN preserves all rows from the left table and fills unmatched columns from the right table with NULLs. An INNER JOIN would drop customers with no orders, a RIGHT JOIN preserves the right table instead, and a CROSS JOIN produces the Cartesian product of both tables.",
+    "hint": "Think about which side of the join must be preserved completely and how columns with no match are represented.",
+    "reference": "Concept: Outer joins | Scenario: List all customers with their orders including unmatched customers"
+  },
+  {
+    "id": "DB-005",
+    "domain": "DBMS",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Which SQL clause groups rows so that an aggregate such as COUNT(*) can return one value per group?",
+    "options": [
+      "ORDER BY",
+      "GROUP BY",
+      "WHERE",
+      "DISTINCT"
+    ],
+    "correct_index": 1,
+    "explanation": "GROUP BY partitions rows into groups based on one or more columns, and aggregate functions are then evaluated once per group. WHERE filters rows before grouping, ORDER BY sorts the final result, and DISTINCT removes duplicate values but does not create aggregate groups.",
+    "hint": "Identify the clause that defines sets of rows over which an aggregate is computed, as opposed to filtering or sorting.",
+    "reference": "Concept: GROUP BY and aggregate functions | Scenario: Counting orders per customer"
+  },
+  {
+    "id": "DB-006",
+    "domain": "DBMS",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Each order is placed by exactly one customer, and a customer may place many orders. What is the cardinality of the Customer-Order relationship?",
+    "options": [
+      "One-to-many",
+      "One-to-one",
+      "Many-to-many",
+      "Unconstrained"
+    ],
+    "correct_index": 0,
+    "explanation": "One customer can be associated with many orders, but each order links back to exactly one customer, which is a one-to-many relationship from Customer to Order. A one-to-one relationship would limit each customer to a single order, and many-to-many would allow a single order to belong to several customers.",
+    "hint": "Consider the maximum number of related records on each side independently and then combine the two directions.",
+    "reference": "Concept: ER cardinality - one-to-many | Scenario: Customer places orders"
+  },
+  {
+    "id": "DB-007",
+    "domain": "DBMS",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "A table stores a PhoneNumbers column where a single cell sometimes holds several comma-separated numbers. Which normal form is directly violated?",
+    "options": [
+      "Second normal form (2NF)",
+      "Third normal form (3NF)",
+      "First normal form (1NF)",
+      "Boyce-Codd normal form (BCNF)"
+    ],
+    "correct_index": 2,
+    "explanation": "First normal form requires every column to hold a single atomic value from its domain; a comma-separated list of phone numbers is a repeating group and violates 1NF. Higher normal forms assume 1NF is already satisfied, so they cannot be the first form violated in this table.",
+    "hint": "Ask whether each cell contains one indivisible value or a collection that could itself be represented as separate rows.",
+    "reference": "Concept: First normal form and atomicity | Scenario: Multi-valued phone-number cell"
+  },
+  {
+    "id": "DB-008",
+    "domain": "DBMS",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Which ACID property guarantees that a transaction is treated as an all-or-nothing unit, meaning either all its operations take effect or none do?",
+    "options": [
+      "Consistency",
+      "Isolation",
+      "Durability",
+      "Atomicity"
+    ],
+    "correct_index": 3,
+    "explanation": "Atomicity ensures a transaction either commits completely or is rolled back entirely, leaving no partial effects; recovery uses the log to undo unfinished transactions. Consistency means a committed transaction moves the database from one valid state to another, isolation controls concurrent visibility, and durability guarantees that committed changes survive failures.",
+    "hint": "Think about which property concerns the boundary of a single transaction's effects rather than its interaction with others or its persistence.",
+    "reference": "Concept: ACID - Atomicity | Scenario: Transaction must not leave partial updates"
+  },
+  {
+    "id": "DB-009",
+    "domain": "DBMS",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "In the Orders table, a column stores values that must match an existing primary key value in the Customers table. What is that column called?",
+    "options": [
+      "Primary key",
+      "Foreign key",
+      "Superkey",
+      "Clustered key"
+    ],
+    "correct_index": 1,
+    "explanation": "A foreign key is a column or set of columns whose values must match a candidate key in a referenced table, enforcing referential integrity. It need not be unique in the referencing table; the primary key belongs to the referenced table, and a superkey is any uniquely identifying attribute set.",
+    "hint": "Consider the direction of the reference and whether the constraint is about local uniqueness or about matching values in another table.",
+    "reference": "Concept: Foreign keys and referential integrity | Scenario: Orders referencing Customers"
+  },
+  {
+    "id": "DB-010",
+    "domain": "DBMS",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Which database object is a stored query that behaves like a virtual table derived from one or more base tables?",
+    "options": [
+      "View",
+      "Trigger",
+      "Sequence",
+      "Synonym"
+    ],
+    "correct_index": 0,
+    "explanation": "A view is a named, stored SELECT statement that presents a virtual table; it does not physically store rows unless it is a materialized view. A trigger is an automatic action fired by data-modification events, a sequence generates numbers, and a synonym is simply an alias for another object.",
+    "hint": "Look for the object whose contents are derived from a query at use time rather than one that stores data or reacts to events.",
+    "reference": "Concept: Views | Scenario: Virtual table showing active customers"
+  },
+  {
+    "id": "DB-011",
+    "domain": "DBMS",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "Sales(sale_id, region, amount) contains (1,'East',100), (2,'East',200), (3,'West',50). What is returned by SELECT region, SUM(amount) FROM Sales GROUP BY region HAVING SUM(amount) > 100?",
+    "options": [
+      "('East', 100) and ('West', 50)",
+      "('West', 50)",
+      "('East', 300)",
+      "('East', 300) and ('West', 50)"
+    ],
+    "correct_index": 2,
+    "explanation": "GROUP BY collapses rows by region: East totals 300 and West totals 50. HAVING filters groups after aggregation, so only the East group with SUM 300 satisfies the greater-than-100 condition. The West group totaling 50 is excluded, and individual row amounts are never returned.",
+    "hint": "Aggregate first and then apply the group-level filter, being careful not to filter individual rows instead of groups.",
+    "reference": "Concept: GROUP BY with HAVING | Scenario: Regional sales totals with a threshold"
+  },
+  {
+    "id": "DB-012",
+    "domain": "DBMS",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "For Employees(id, name, salary), what does SELECT name FROM Employees WHERE salary > (SELECT AVG(salary) FROM Employees) return?",
+    "options": [
+      "Only the highest-paid employee's name",
+      "Names of employees whose salary is above the overall average",
+      "All names sorted by salary descending",
+      "Names of employees earning exactly the average"
+    ],
+    "correct_index": 1,
+    "explanation": "The subquery computes a single average value once, and the outer query returns names of employees whose salary exceeds that scalar value. It does not limit the result to the top earner, does not sort the output, and uses a strict greater-than so employees exactly at the average are excluded.",
+    "hint": "Determine whether the subquery produces one scalar value or a set, and how the outer comparison consumes it.",
+    "reference": "Concept: Scalar subquery in WHERE | Scenario: Employees above average salary"
+  },
+  {
+    "id": "DB-013",
+    "domain": "DBMS",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A B-tree index exists on orders(created_at). Which predicate best exploits the ordered structure of that index?",
+    "options": [
+      "WHERE created_at LIKE '%2026%'",
+      "WHERE YEAR(created_at) = 2026",
+      "WHERE created_at IS NULL",
+      "WHERE created_at BETWEEN '2026-01-01' AND '2026-06-30'"
+    ],
+    "correct_index": 3,
+    "explanation": "A B-tree keeps key values sorted, so a BETWEEN condition maps to a contiguous range scan over the index. A leading-wildcard LIKE cannot use the ordered key, wrapping the column in YEAR() typically prevents use of a plain index on the raw column, and IS NULL is not a useful ordered range predicate.",
+    "hint": "Ask which condition corresponds to a contiguous span of sorted key values rather than requiring a scan or a transformation of the column.",
+    "reference": "Concept: B-tree range scans and sargability | Scenario: Date-range filtering on an indexed column"
+  },
+  {
+    "id": "DB-014",
+    "domain": "DBMS",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "Relation R(StudentID, CourseID, Grade, CourseName) has FDs StudentID,CourseID -> Grade and CourseID -> CourseName, with key (StudentID, CourseID). Which fact shows R is not in 2NF?",
+    "options": [
+      "CourseID -> CourseName is a dependency on part of the key",
+      "StudentID,CourseID -> Grade is a full-key dependency",
+      "Grade -> CourseName holds",
+      "StudentID -> CourseID holds"
+    ],
+    "correct_index": 0,
+    "explanation": "Second normal form requires every non-prime attribute to depend on the whole of a candidate key, not on a subset. CourseName depends on CourseID alone, which is only part of the composite key (StudentID, CourseID), so this partial dependency violates 2NF. The full-key dependency determining Grade is perfectly allowed.",
+    "hint": "Check whether any non-key attribute depends on a strict subset of a composite key rather than on the entire key.",
+    "reference": "Concept: Functional dependencies and 2NF | Scenario: CourseName partially dependent on a composite key"
+  },
+  {
+    "id": "DB-015",
+    "domain": "DBMS",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A composite B-tree index exists on Employee(department, salary). Which WHERE clause can use that index through its leftmost prefix?",
+    "options": [
+      "WHERE salary > 90000",
+      "WHERE UPPER(department) = 'SALES'",
+      "WHERE department = 'Sales' AND salary > 90000",
+      "WHERE salary BETWEEN 50000 AND 60000"
+    ],
+    "correct_index": 2,
+    "explanation": "A composite index can be traversed when its leading, leftmost column is constrained; here department = 'Sales' fixes the first column and salary narrows the second, giving an efficient range on the remaining key. Predicates on salary alone skip the leading column, and applying UPPER() to department blocks use of an index on the raw column unless a matching expression index exists.",
+    "hint": "Identify which column must be anchored first for a multi-column index to be usable, and watch for functions applied to indexed columns.",
+    "reference": "Concept: Composite index and leftmost-prefix rule | Scenario: Filtering on department then salary"
+  },
+  {
+    "id": "DB-016",
+    "domain": "DBMS",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A hash index is defined on Customers(email). Which type of query is it best suited to?",
+    "options": [
+      "Range scans such as email BETWEEN 'a' AND 'm'",
+      "Queries that return email values in sorted order",
+      "Prefix matching such as email LIKE 'a%'",
+      "Equality lookups such as WHERE email = 'a@example.com'"
+    ],
+    "correct_index": 3,
+    "explanation": "A hash index maps a key through a hash function directly to a bucket, which is efficient for exact equality predicates but destroys ordering. It therefore cannot support range scans, ORDER BY on the key, or prefix LIKE patterns, all of which rely on preserved key order as a B-tree provides.",
+    "hint": "Consider what a hash function preserves about key order and which comparison operations reduce to a single bucket lookup.",
+    "reference": "Concept: Hash indexes versus B-tree indexes | Scenario: Exact-match lookup on email"
+  },
+  {
+    "id": "DB-017",
+    "domain": "DBMS",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A company wants a junior analyst to read the Reports table but never modify it or see salary data. Which SQL security mechanism is the appropriate first step?",
+    "options": [
+      "Grant the analyst the DBA role",
+      "Create a view exposing only permitted columns and grant SELECT on that view",
+      "Give the analyst the table's DROP privilege",
+      "Disable all constraints on the table"
+    ],
+    "correct_index": 1,
+    "explanation": "The principle of least privilege says to grant only the permissions actually required; a view can expose a restricted subset of columns, and granting SELECT on that view limits both what is visible and what can be changed. Granting DBA or DROP privileges is excessively broad, and disabling constraints weakens integrity without addressing access control.",
+    "hint": "Think about restricting both the visible rows and columns and the operations allowed, rather than trusting broad account privileges.",
+    "reference": "Concept: Database security, views, least privilege | Scenario: Restricted analyst access to reports"
+  },
+  {
+    "id": "DB-018",
+    "domain": "DBMS",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A startup stores product catalogs as self-contained JSON-like documents grouped in collections, with no fixed table schema required for every document. Which database category does this describe?",
+    "options": [
+      "Document-oriented NoSQL store",
+      "Relational DBMS",
+      "Hierarchical DBMS",
+      "In-memory key-value store with a fixed schema"
+    ],
+    "correct_index": 0,
+    "explanation": "A document store such as MongoDB keeps data as documents, for example BSON or JSON, allowing each record to have its own shape and grouping them into collections. A relational DBMS requires a defined table schema, a hierarchical model uses tree structures, and a fixed-schema key-value store does not match the flexible document description.",
+    "hint": "Focus on the unit of storage and whether the structure is schema-flexible, not merely on whether the system happens to run in memory.",
+    "reference": "Concept: NoSQL document stores | Scenario: Schema-flexible product catalogs"
+  },
+  {
+    "id": "DB-019",
+    "domain": "DBMS",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A query SELECT * FROM orders WHERE status = 'pending' takes 8 seconds on a 5-million-row table. EXPLAIN shows type=ALL, a full table scan, even though an index on id exists. What is the most direct fix?",
+    "options": [
+      "Increase the buffer pool size only",
+      "Rewrite the query as a view",
+      "Add an index on status and select only the columns needed",
+      "Rebuild the index on id"
+    ],
+    "correct_index": 2,
+    "explanation": "The filter is on status, so an index on id cannot narrow the search and the optimizer scans all rows. An index on status gives an indexed lookup on the selective predicate, and listing only needed columns can let a covering index satisfy the query without extra table row lookups. Buffer-pool tuning, views, and rebuilding the irrelevant id index do not create the missing access path.",
+    "hint": "Match the indexed column to the column actually constrained in WHERE, and consider whether fetching every column forces additional row lookups.",
+    "reference": "Concept: EXPLAIN, index selection, covering indexes | Scenario: Slow filtered query doing a full scan"
+  },
+  {
+    "id": "DB-020",
+    "domain": "DBMS",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "T1 holds a lock on row A and wants row B; T2 holds a lock on row B and wants row A. The DBMS detects a cycle in the wait-for graph and rolls back one transaction. What mechanism is this?",
+    "options": [
+      "Lock upgrading from shared to exclusive",
+      "Deadlock detection with victim selection and rollback",
+      "Phantom-row prevention",
+      "Two-phase locking release phase"
+    ],
+    "correct_index": 1,
+    "explanation": "A circular wait where each transaction holds a resource the other needs is a deadlock; a wait-for graph captures this cycle, and the DBMS breaks it by aborting a victim transaction. Lock upgrading, phantom prevention, and the shrinking phase of two-phase locking describe other concurrency behaviours and do not resolve a circular wait.",
+    "hint": "Look for the condition where no transaction can proceed because each waits on a resource held by the other, and how the system breaks such a cycle.",
+    "reference": "Concept: Deadlock detection and victim rollback | Scenario: Two transactions locking rows in opposite order"
+  },
+  {
+    "id": "DB-021",
+    "domain": "DBMS",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "An orders table has billions of rows and range queries on order_date are slow even with an index. Which physical design strategy most directly reduces the amount of data scanned?",
+    "options": [
+      "Add a second index on customer_id",
+      "Convert the table into a view",
+      "Remove all indexes to reduce overhead",
+      "Range-partition the table by order_date so queries prune irrelevant partitions"
+    ],
+    "correct_index": 3,
+    "explanation": "Range partitioning divides rows into partitions by order_date, so a date-range query can be answered by scanning only the matching partitions, an effect called partition pruning. An extra index on customer_id does not help a date-range predicate, a view is just a stored query, and removing indexes does not reduce the number of rows scanned.",
+    "hint": "Think about physically grouping rows so a predicate lets the engine skip whole chunks of data rather than adding more lookup structures.",
+    "reference": "Concept: Table partitioning and partition pruning | Scenario: Slow date-range queries on a huge orders table"
+  },
+  {
+    "id": "DB-022",
+    "domain": "DBMS",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A transaction commits and its COMMIT record is written to the write-ahead log, but the modified data pages have not been flushed to disk when the system crashes. What does recovery do?",
+    "options": [
+      "Redo the committed transaction's logged changes from the log",
+      "Undo the transaction because its data pages were never written",
+      "Discard the log and restore from the last backup",
+      "Ignore the commit record because no pages changed"
+    ],
+    "correct_index": 0,
+    "explanation": "Under write-ahead logging, the log record must reach disk before the corresponding data page, so after a crash the log is authoritative: committed transactions whose changes may not have reached disk are redone. Committed transactions are never undone, an uncommitted transaction would instead be undone, and restoring from backup alone would lose committed work.",
+    "hint": "Remember which copy is guaranteed to be on disk first and what recovery does with committed versus uncommitted log records.",
+    "reference": "Concept: WAL and redo of committed transactions | Scenario: Crash after commit before page flush"
+  },
+  {
+    "id": "DB-023",
+    "domain": "DBMS",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "T1 reads an account balance of 100. T2 changes it to 80 and commits. T1 reads the same balance again and now sees 80. Which anomaly did T1 experience?",
+    "options": [
+      "Dirty read",
+      "Phantom read",
+      "Non-repeatable read",
+      "Lost update"
+    ],
+    "correct_index": 2,
+    "explanation": "A non-repeatable read occurs when re-reading the same row inside a transaction returns a different value because another transaction modified and committed it. A dirty read would involve uncommitted data, a phantom involves new rows appearing in a range query, and a lost update involves two writers overwriting each other's changes.",
+    "hint": "Distinguish changes to a row already read from new rows appearing, and note whether the other transaction committed.",
+    "reference": "Concept: Isolation anomalies - non-repeatable read | Scenario: Balance changes between two reads in one transaction"
+  },
+  {
+    "id": "DB-024",
+    "domain": "DBMS",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A read-heavy dashboard shows stale values for several seconds after writes are committed on the primary database, though no error is raised. What most likely explains this?",
+    "options": [
+      "The dashboard query is missing a GROUP BY clause",
+      "A foreign key constraint is disabled",
+      "The isolation level is set to SERIALIZABLE",
+      "The replica used for reads lags behind the primary under asynchronous replication"
+    ],
+    "correct_index": 3,
+    "explanation": "With asynchronous replication, the primary acknowledges commits before replicas have applied them, so reads routed to a replica can observe older data for a short window. This is replication lag, not a SQL syntax or constraint issue, and setting SERIALIZABLE on the replica cannot create changes the replica has not yet received.",
+    "hint": "Consider where the read is actually served from and whether that copy is guaranteed to be current at the instant of the write.",
+    "reference": "Concept: Replication lag and read consistency | Scenario: Dashboard reading from an asynchronous replica"
+  },
+  {
+    "id": "DB-025",
+    "domain": "DBMS",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "An application must never see new rows appear in the middle of a repeated range query inside one transaction. Which isolation level is the minimum that prevents phantoms in standard SQL?",
+    "options": [
+      "READ COMMITTED",
+      "SERIALIZABLE",
+      "REPEATABLE READ",
+      "READ UNCOMMITTED"
+    ],
+    "correct_index": 1,
+    "explanation": "In the SQL standard, only SERIALIZABLE guarantees that phantom rows, meaning new rows matching a repeated predicate, cannot appear; REPEATABLE READ prevents non-repeatable reads of existing rows but not phantoms. READ COMMITTED and READ UNCOMMITTED permit progressively more anomalies and therefore do not meet the requirement.",
+    "hint": "Phantoms involve rows that did not exist at the first read; ask which level treats the whole transaction as if it were the only one running.",
+    "reference": "Concept: Isolation levels and phantom reads | Scenario: Repeated range query must not gain new rows"
+  },
+  {
+    "id": "DB-026",
+    "domain": "DBMS",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "Scores(player, points) contains (A,10), (B,20), (C,15), (D,5). What does SELECT player FROM Scores ORDER BY points DESC LIMIT 1 OFFSET 1 return?",
+    "options": [
+      "C",
+      "B",
+      "A",
+      "D"
+    ],
+    "correct_index": 0,
+    "explanation": "Ordering by points descending yields B with 20, C with 15, A with 10, and D with 5. OFFSET 1 skips the first row, which is B, and LIMIT 1 then returns the next row, C.",
+    "hint": "Apply the sort first, then skip the specified number of rows, and finally take the allowed count.",
+    "reference": "Concept: ORDER BY with LIMIT and OFFSET | Scenario: Selecting the second-highest score"
+  },
+  {
+    "id": "DB-027",
+    "domain": "DBMS",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "Two very large, unsorted tables are joined on an equality condition and no useful indexes exist. Which join strategy does an optimizer typically prefer to avoid repeatedly rescanning the inner table?",
+    "options": [
+      "Nested-loop join that fully scans the inner table for every outer row",
+      "Index nested-loop join using an index on the inner join key",
+      "Hash join that builds an in-memory hash table on the smaller input",
+      "Merge join on two unsorted inputs without any sorting step"
+    ],
+    "correct_index": 2,
+    "explanation": "For large unsorted equijoins without indexes, a hash join builds a hash table on the smaller build relation and probes it with the larger relation, giving roughly linear cost instead of quadratic rescans. A plain nested loop rescans the inner table repeatedly, an index nested loop is unavailable without an index, and a merge join requires both inputs to be sorted first.",
+    "hint": "Compare how each algorithm scales with input size and what preprocessing, sorting or indexing, each one assumes.",
+    "reference": "Concept: Hash join versus nested loop and merge join | Scenario: Large unsorted equijoin without indexes"
+  },
+  {
+    "id": "DB-028",
+    "domain": "DBMS",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "Under snapshot isolation, T1 and T2 both observe that two accounts together hold 100. Each withdraws from a different account based on that snapshot and commits, and the final total becomes negative. What is this anomaly called?",
+    "options": [
+      "Dirty read",
+      "Write skew",
+      "Lost update",
+      "Non-repeatable read"
+    ],
+    "correct_index": 1,
+    "explanation": "Write skew occurs when transactions read an overlapping snapshot but write to disjoint rows, so each decision is valid against its own snapshot yet their combination violates an invariant. Unlike a lost update, the two transactions do not overwrite the same row, which is exactly why snapshot isolation alone does not prevent this anomaly.",
+    "hint": "Ask whether the transactions wrote the same row or different rows, and whether each read a consistent but stale view that made its action seem safe.",
+    "reference": "Concept: Write skew under snapshot isolation | Scenario: Two withdrawals breaking a balance invariant"
+  },
+  {
+    "id": "DB-029",
+    "domain": "DBMS",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "A DBMS uses WAL with periodic checkpoints. A checkpoint completed at LSN 500; at crash time the log holds a committed transaction through LSN 700 and an uncommitted transaction at LSN 650. Which recovery action is correct?",
+    "options": [
+      "Replay the entire log from the start and ignore the checkpoint",
+      "Redo nothing because the checkpoint flushed every page",
+      "Undo all transactions after LSN 500, including the committed one",
+      "Redo committed changes recorded after the checkpoint and undo the uncommitted transaction"
+    ],
+    "correct_index": 3,
+    "explanation": "A checkpoint bounds recovery work: pages were guaranteed clean only up to LSN 500, so redo begins near there for changes that might not have reached disk. The committed transaction up to LSN 700 must be redone, while the uncommitted transaction at LSN 650 must be undone; ignoring the checkpoint or undoing committed work would be incorrect.",
+    "hint": "Separate what a checkpoint guarantees from what it does not, then classify each log record after it by its transaction's final state.",
+    "reference": "Concept: Checkpoints with WAL - redo and undo | Scenario: Crash with committed and uncommitted log records"
+  },
+  {
+    "id": "DB-030",
+    "domain": "DBMS",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "R(Student, Course, Instructor) has FDs (Student, Course) -> Instructor and Instructor -> Course, with candidate keys (Student, Course) and (Student, Instructor). Which statement is correct?",
+    "options": [
+      "R is in BCNF but not in 3NF",
+      "R is not in 3NF because Instructor is not a superkey",
+      "R is in 3NF but not BCNF because Instructor -> Course has a non-superkey determinant while Course is prime",
+      "R is in neither 2NF nor 3NF"
+    ],
+    "correct_index": 2,
+    "explanation": "Course is a prime attribute because it is part of the candidate key (Student, Course). The FD Instructor -> Course has a right-hand side that is prime, so 3NF is satisfied, but its determinant Instructor is not a superkey, which violates BCNF. This is the classic example of a relation in 3NF but not BCNF.",
+    "hint": "Check each functional dependency against two different tests: one cares whether the right-hand side is prime, the other cares whether the left-hand side is a superkey.",
+    "reference": "Concept: 3NF versus BCNF with prime attributes | Scenario: Student-Course-Instructor dependencies"
+  }
+]

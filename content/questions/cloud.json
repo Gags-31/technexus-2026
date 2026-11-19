@@ -1,0 +1,542 @@
+[
+  {
+    "id": "CC-001",
+    "domain": "Cloud Computing",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "A student team wants to run a web application without managing physical servers, but they still need to install their own operating system patches, runtime, and web server software. Which AWS service model does this describe?",
+    "options": [
+      "IaaS - Amazon EC2",
+      "PaaS - AWS Elastic Beanstalk",
+      "SaaS - Amazon WorkMail",
+      "FaaS - AWS Lambda"
+    ],
+    "correct_index": 0,
+    "explanation": "Infrastructure as a Service provides virtualized compute, storage, and networking on demand while leaving the guest OS, middleware, and runtime under customer control. EC2 supplies raw virtual machines, so patching the operating system and configuring Apache or Nginx remains the team's job. PaaS abstracts the OS, SaaS delivers a complete application, and FaaS executes discrete functions without a persistent server.",
+    "hint": "Think about where the responsibility boundary sits: the provider owns the physical host and virtualization layer, but who owns everything above the hypervisor?",
+    "reference": "Concept: Cloud service models (IaaS/PaaS/SaaS/FaaS) | Scenario: EC2 OS patching responsibility"
+  },
+  {
+    "id": "CC-002",
+    "domain": "Cloud Computing",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "An application serves profile images that are requested several times per hour and must be returned with millisecond latency. Which Amazon S3 storage class is the most appropriate default?",
+    "options": [
+      "S3 Glacier Deep Archive",
+      "S3 Standard-IA",
+      "S3 Standard",
+      "S3 One Zone-IA"
+    ],
+    "correct_index": 2,
+    "explanation": "S3 Standard is built for frequently accessed data with high throughput and low-latency retrieval, and it carries no per-request retrieval fee. Standard-IA and One Zone-IA charge lower storage rates but add retrieval fees, which become expensive with hourly reads. Glacier classes are archival tiers with retrieval times ranging from minutes to hours.",
+    "hint": "Compare the cost of storing an object with the cost of retrieving it; frequent, latency-sensitive reads change which tier is economical.",
+    "reference": "Concept: Amazon S3 storage classes | Scenario: Frequently accessed profile images"
+  },
+  {
+    "id": "CC-003",
+    "domain": "Cloud Computing",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "A developer needs to be able to start and stop one specific EC2 instance but must not be able to terminate it. Which AWS feature enforces this restriction?",
+    "options": [
+      "An EC2 security group with inbound rules",
+      "An IAM policy with scoped actions and a resource ARN",
+      "A VPC network ACL",
+      "An Auto Scaling lifecycle hook"
+    ],
+    "correct_index": 1,
+    "explanation": "IAM policies are JSON documents that allow or deny specific API actions against specific resources identified by ARNs. A policy allowing only ec2:StartInstances and ec2:StopInstances on a single instance ARN grants exactly the required access while implicitly denying other actions. Security groups and network ACLs filter network traffic, not API authorization, and lifecycle hooks manage instance state transitions.",
+    "hint": "Authorization for control-plane API calls is separate from network filtering; look for the mechanism that evaluates identities, actions, and resource identifiers.",
+    "reference": "Concept: IAM least-privilege policies | Scenario: Restrict EC2 start/stop permissions"
+  },
+  {
+    "id": "CC-004",
+    "domain": "Cloud Computing",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "What does an Amazon EC2 instance represent?",
+    "options": [
+      "A managed relational database cluster",
+      "A serverless function invoked by events",
+      "A DNS hosted zone",
+      "A virtual machine providing resizable compute capacity"
+    ],
+    "correct_index": 3,
+    "explanation": "EC2 provides virtual servers in the cloud with configurable CPU, memory, storage, and networking. Instances are launched from AMIs and can be resized, stopped, or terminated as demand changes. The other options describe RDS, Lambda, and Route 53 respectively.",
+    "hint": "Identify the service that gives you an operating-system-level compute environment you can log into and configure yourself.",
+    "reference": "Concept: Amazon EC2 compute | Scenario: Identifying an EC2 instance"
+  },
+  {
+    "id": "CC-005",
+    "domain": "Cloud Computing",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Which component creates and runs virtual machines by abstracting the physical CPU, memory, and I/O devices of a host server?",
+    "options": [
+      "A content delivery network",
+      "A hypervisor",
+      "A managed DNS resolver",
+      "An object storage bucket"
+    ],
+    "correct_index": 1,
+    "explanation": "A hypervisor, also called a virtual machine monitor, sits between physical hardware and guest operating systems and allocates CPU, memory, and devices to each VM. Type 1 hypervisors run directly on bare metal, which is the model used by AWS's Nitro system. CDNs, DNS resolvers, and object storage all operate at entirely different layers of the stack.",
+    "hint": "Consider the software layer that multiplexes one physical machine into several isolated guest environments.",
+    "reference": "Concept: Virtualization and hypervisors | Scenario: How EC2 virtualizes hardware"
+  },
+  {
+    "id": "CC-006",
+    "domain": "Cloud Computing",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "A media site wants to reduce load on its origin server and lower latency for viewers worldwide by caching video thumbnails close to users. Which AWS service should be placed in front of the origin?",
+    "options": [
+      "Amazon CloudFront",
+      "Amazon RDS",
+      "AWS Direct Connect",
+      "Amazon Route 53, used only as a DNS resolver"
+    ],
+    "correct_index": 0,
+    "explanation": "CloudFront is a content delivery network that caches static and dynamic content at edge locations, reducing origin requests and network latency. DNS alone only resolves names to IP addresses and does not cache content or accelerate delivery. Direct Connect provides a private network link, and RDS is a relational database service.",
+    "hint": "Think about the layer that stores copies of your content geographically close to end users rather than merely telling them where your origin is.",
+    "reference": "Concept: CDN and edge caching | Scenario: Global thumbnail delivery"
+  },
+  {
+    "id": "CC-007",
+    "domain": "Cloud Computing",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "A team needs a managed PostgreSQL database with automated backups, patching, and automatic failover to a standby in another Availability Zone. Which service fits best?",
+    "options": [
+      "Amazon S3",
+      "Amazon EC2 with a self-managed database",
+      "Amazon RDS",
+      "AWS Lambda"
+    ],
+    "correct_index": 2,
+    "explanation": "Amazon RDS is a managed relational database service supporting engines such as PostgreSQL, MySQL, and Oracle. It automates backups, software patching, and hardware failure detection, while Multi-AZ deployments maintain a synchronously replicated standby in a second Availability Zone. Running the engine yourself on EC2 leaves all those operational tasks with the team.",
+    "hint": "Look for a managed service that handles relational engine maintenance and also offers a cross-AZ standby option.",
+    "reference": "Concept: Managed relational databases | Scenario: PostgreSQL with automated failover"
+  },
+  {
+    "id": "CC-008",
+    "domain": "Cloud Computing",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Under the AWS shared responsibility model, who is responsible for applying security patches to the guest operating system of an EC2 instance?",
+    "options": [
+      "AWS, entirely",
+      "The customer, because this is security in the cloud",
+      "AWS, because it owns the hypervisor",
+      "The customer, because this is security of the guest OS"
+    ],
+    "correct_index": 3,
+    "explanation": "AWS is responsible for security of the cloud: facilities, hardware, networking, and the virtualization layer. The customer is responsible for security in the cloud, which for EC2 includes guest OS patching, application security, IAM, and data encryption. One distractor has a true premise but answers the wrong question: AWS patches the hypervisor, not your guest operating system.",
+    "hint": "Separate the provider's duty to protect the underlying platform from your duty to protect everything you install on top of it.",
+    "reference": "Concept: Shared responsibility model | Scenario: EC2 guest OS patching"
+  },
+  {
+    "id": "CC-009",
+    "domain": "Cloud Computing",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "What is the primary purpose of an Amazon EC2 Auto Scaling group?",
+    "options": [
+      "To distribute incoming HTTP requests across instances",
+      "To automatically add or remove instances to match demand and maintain availability",
+      "To store and retrieve objects",
+      "To route traffic to different DNS endpoints"
+    ],
+    "correct_index": 1,
+    "explanation": "An Auto Scaling group maintains a desired capacity and launches or terminates EC2 instances based on policies, schedules, or health checks. It improves availability by replacing unhealthy instances and controls cost by scaling in during quiet periods. Traffic distribution, object storage, and DNS routing belong to ELB, S3, and Route 53.",
+    "hint": "Focus on the mechanism that changes the number of instances over time in response to metrics and health, rather than the one that balances traffic among them.",
+    "reference": "Concept: Elastic scaling | Scenario: Auto Scaling group purpose"
+  },
+  {
+    "id": "CC-010",
+    "domain": "Cloud Computing",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Which AWS service is a highly available managed Domain Name System that can route users to EC2 instances, load balancers, and S3 websites?",
+    "options": [
+      "Amazon Route 53",
+      "Amazon CloudWatch",
+      "AWS Lambda",
+      "Amazon DynamoDB"
+    ],
+    "correct_index": 0,
+    "explanation": "Route 53 is a highly available managed DNS service that translates names into IP addresses and supports routing policies such as simple, weighted, latency-based, and failover. It can also register domains and perform health checks against endpoints. CloudWatch monitors metrics and logs, Lambda runs code, and DynamoDB stores NoSQL data.",
+    "hint": "Identify the service that owns a hosted zone and answers name-resolution queries.",
+    "reference": "Concept: Managed DNS | Scenario: Domain routing to AWS resources"
+  },
+  {
+    "id": "CC-011",
+    "domain": "Cloud Computing",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A team sketches this architecture: internet users, then an AWS-managed edge cache, then an internet-facing layer-7 load balancer, then an Auto Scaling group of EC2 instances, then a Multi-AZ relational database. Which component terminates client HTTP/HTTPS connections and forwards requests to healthy application instances?",
+    "options": [
+      "The Multi-AZ database",
+      "The Auto Scaling group",
+      "The Application Load Balancer",
+      "The edge cache"
+    ],
+    "correct_index": 2,
+    "explanation": "An Application Load Balancer works at OSI layer 7, terminating client connections and routing requests to registered targets based on host, path, and headers while checking target health. The edge cache accelerates and offloads static content but forwards cache misses to the load balancer. The Auto Scaling group controls instance count, and the database stores application state.",
+    "hint": "Look for the component that understands HTTP semantics, performs health checks on targets, and sits between the edge layer and your compute fleet.",
+    "reference": "Concept: Elastic Load Balancing (ALB) | Scenario: Three-tier web architecture"
+  },
+  {
+    "id": "CC-012",
+    "domain": "Cloud Computing",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "An application needs a fully managed key-value store with consistent single-digit millisecond latency, elastic throughput, and no servers to operate. Which service matches this description?",
+    "options": [
+      "Amazon DynamoDB",
+      "Amazon RDS for MySQL",
+      "Amazon S3 Standard",
+      "Amazon Redshift"
+    ],
+    "correct_index": 0,
+    "explanation": "DynamoDB is a serverless NoSQL key-value and document database offering single-digit millisecond access, on-demand or provisioned capacity, and optional global replication. RDS hosts relational engines, S3 is object storage, and Redshift is a columnar analytics warehouse, so none of them match the key-value latency profile.",
+    "hint": "Match the requirements to a managed NoSQL key-value store with predictable ultra-low latency and capacity that grows with demand.",
+    "reference": "Concept: Managed NoSQL databases | Scenario: Low-latency key-value lookup"
+  },
+  {
+    "id": "CC-013",
+    "domain": "Cloud Computing",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "In a VPC diagram, application instances sit in a private subnet with no public IPs. They must download OS updates from the internet, but no internet host may initiate a connection to them. Which configuration satisfies this?",
+    "options": [
+      "Attach an Internet Gateway directly to the private subnet",
+      "Assign Elastic IPs to every instance",
+      "Enable VPC peering with the default VPC",
+      "Route outbound traffic through a NAT Gateway in a public subnet"
+    ],
+    "correct_index": 3,
+    "explanation": "A NAT Gateway deployed in a public subnet allows private-subnet instances to initiate outbound connections while refusing unsolicited inbound connections from the internet. An Internet Gateway combined with public IPs would make resources directly reachable, and Elastic IPs expose the instances. VPC peering connects networks but does not provide internet egress.",
+    "hint": "You need one-way internet access: outbound allowed, inbound refused. Think about which network device translates private addresses for egress only.",
+    "reference": "Concept: VPC public/private subnets and NAT | Scenario: Private subnet internet egress"
+  },
+  {
+    "id": "CC-014",
+    "domain": "Cloud Computing",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "An order service publishes events, and three independent microservices each need their own copy of every event so they can process it at their own pace. Which messaging design fits best?",
+    "options": [
+      "A single SQS queue consumed by one worker group",
+      "An SNS topic with three SQS queues subscribed",
+      "A CloudFront distribution with three origins",
+      "A Route 53 weighted record set"
+    ],
+    "correct_index": 1,
+    "explanation": "SNS implements publish/subscribe, delivering a copy of each message to every subscribed endpoint; pairing it with per-service SQS queues gives each consumer isolation, buffering, and independent retry behavior. A single SQS queue makes workers compete for each message rather than fan it out. CDNs and DNS routing are unrelated to application messaging.",
+    "hint": "Distinguish fan-out, where one event reaches many independent recipients, from work queues, where many workers compete to process each item once.",
+    "reference": "Concept: SNS pub/sub and SQS decoupling | Scenario: Event fan-out to microservices"
+  },
+  {
+    "id": "CC-015",
+    "domain": "Cloud Computing",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A team wants a thumbnail function that runs only when a new image lands in an S3 bucket, scales automatically, and costs nothing while idle. Which compute option matches?",
+    "options": [
+      "A reserved EC2 Auto Scaling group",
+      "An ECS cluster with always-on Fargate tasks",
+      "AWS Lambda",
+      "A Reserved Instance in a single Availability Zone"
+    ],
+    "correct_index": 2,
+    "explanation": "Lambda is a function-as-a-service compute model: you upload code, define an event source such as an S3 bucket notification, and AWS runs it per invocation with automatic scaling and per-use billing. EC2, ECS/Fargate, and Reserved Instances imply continuously provisioned capacity and idle cost. That makes Lambda the natural fit for sporadic event-driven work.",
+    "hint": "Think about event-driven execution where capacity materializes per request and there is nothing to keep running between invocations.",
+    "reference": "Concept: Serverless/FaaS | Scenario: S3-triggered thumbnail generation"
+  },
+  {
+    "id": "CC-016",
+    "domain": "Cloud Computing",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "An operator wants to be notified automatically when CPU utilization on a fleet exceeds 80% for 10 minutes. Which service evaluates the metric and triggers the notification?",
+    "options": [
+      "Amazon CloudWatch with an alarm and an SNS action",
+      "Amazon S3 with a lifecycle rule",
+      "AWS Config with a conformance pack",
+      "Amazon Route 53 with a health check"
+    ],
+    "correct_index": 0,
+    "explanation": "CloudWatch collects metrics and evaluates alarm rules over a specified period; when a threshold is breached for the required number of periods, the alarm changes state and can publish to an SNS topic for email or pager integration. S3 lifecycle rules manage object transitions, Config audits resource compliance, and Route 53 health checks monitor endpoint reachability.",
+    "hint": "You need a service that stores time-series metrics, evaluates a threshold over a time window, and can invoke a notification action on state change.",
+    "reference": "Concept: Monitoring and alarming | Scenario: CPU threshold notification"
+  },
+  {
+    "id": "CC-017",
+    "domain": "Cloud Computing",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A team has containerized a microservice and wants to run it in production without provisioning, patching, or sizing EC2 instances themselves. Which choice best meets this goal?",
+    "options": [
+      "EC2 instances with Docker installed manually",
+      "Amazon S3 static website hosting",
+      "Amazon RDS Multi-AZ",
+      "AWS Fargate as the compute engine for ECS or EKS"
+    ],
+    "correct_index": 3,
+    "explanation": "Fargate is a serverless compute engine for containers that allocates appropriate resources per task or pod and removes the need to manage underlying EC2 workers. With ECS or EKS on Fargate you declare container images and resource requests instead of instance types and AMIs. Self-managed Docker on EC2 leaves host patching and capacity planning to the team.",
+    "hint": "Look for the model where the platform owns the container host entirely and you only declare the container's resource requirements.",
+    "reference": "Concept: Container orchestration and serverless compute | Scenario: Running containers without managing instances"
+  },
+  {
+    "id": "CC-018",
+    "domain": "Cloud Computing",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A site serves static images from S3 and API responses from an Application Load Balancer through a single CDN distribution. How should it be configured so images are cached for a long time while API responses are not cached?",
+    "options": [
+      "Use one cache policy with the longest TTL for both origins",
+      "Define separate cache behaviors keyed by path pattern, each with its own cache policy",
+      "Place the S3 bucket and the load balancer in the same Availability Zone",
+      "Convert every API response into a static object stored in S3"
+    ],
+    "correct_index": 1,
+    "explanation": "CloudFront routes requests to different origins using cache behaviors matched by path patterns, and each behavior carries its own cache policy, TTLs, and forwarded headers. A path such as /static/* can use long-lived caching while /api/* uses a policy that forwards request data and disables or minimizes caching. Co-locating origins or rewriting APIs as static objects does not express per-content caching rules.",
+    "hint": "Caching needs differ by content type, so look for the configuration that lets one distribution apply different rules to different URL paths.",
+    "reference": "Concept: CloudFront cache behaviors | Scenario: Mixed static and dynamic origins"
+  },
+  {
+    "id": "CC-019",
+    "domain": "Cloud Computing",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "After a release, a team's AWS bill jumps sharply even though traffic is flat. Investigation shows Lambda duration is unchanged but CloudWatch Logs ingestion rose roughly 20-fold. What is the most likely cause?",
+    "options": [
+      "Lambda functions were switched to provisioned concurrency",
+      "Application logging was raised to DEBUG, emitting verbose structured logs",
+      "The S3 bucket lifecycle policy was deleted",
+      "The RDS instance class was reduced"
+    ],
+    "correct_index": 1,
+    "explanation": "CloudWatch Logs is metered largely on ingested data volume, so a 20x increase in logs written directly raises cost while leaving execution duration untouched. Switching on DEBUG logging or logging full request and response payloads is a classic trigger. Provisioned concurrency would inflate Lambda charges rather than log ingestion, a removed lifecycle policy affects storage spend, and downsizing RDS lowers cost.",
+    "hint": "Follow the metric that actually moved: which cost driver is billed per gigabyte of data written rather than per unit of compute?",
+    "reference": "Concept: Cloud cost drivers and observability spend | Scenario: Unexpected logging bill"
+  },
+  {
+    "id": "CC-020",
+    "domain": "Cloud Computing",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A Lambda function in Account A can read from an S3 bucket in Account B but gets AccessDenied when writing new objects. The function's execution role already allows s3:PutObject on that bucket ARN. What is most likely missing?",
+    "options": [
+      "A bucket lifecycle rule that enables writes",
+      "A CloudFront origin access identity",
+      "A bucket policy in Account B granting the Account A role s3:PutObject",
+      "An S3 event notification configured in Account B"
+    ],
+    "correct_index": 2,
+    "explanation": "Cross-account S3 access requires the caller's identity policy and the resource owner's bucket policy to both allow the action; working reads show connectivity exists, but the write action is not permitted by the owning account. Lifecycle rules manage object transitions, origin access identities are for CloudFront read access, and event notifications react to writes rather than authorize them.",
+    "hint": "In cross-account access both sides must agree, so check the resource owner's policy as well as the caller's permissions.",
+    "reference": "Concept: Cross-account IAM and bucket policies | Scenario: S3 write AccessDenied"
+  },
+  {
+    "id": "CC-021",
+    "domain": "Cloud Computing",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "Users in Europe report 800 ms load times for a dynamic application whose origin is a single Application Load Balancer in us-east-1. Static assets are already cached at the edge. What change best reduces the dynamic latency?",
+    "options": [
+      "Deploy the application stack in an EU region and steer users with latency-based routing and global acceleration",
+      "Increase the number of NAT Gateways in us-east-1",
+      "Switch the RDS database from Multi-AZ to Single-AZ",
+      "Disable TLS on the load balancer"
+    ],
+    "correct_index": 0,
+    "explanation": "The dominant factor is the physical round-trip between European users and a US origin, which edge caching of static files does not fix for dynamic requests. Running the workload in an EU region and routing users there with latency-based DNS or a global acceleration service shortens that path. NAT gateway count, database AZ mode, and TLS settings do not materially change intercontinental latency.",
+    "hint": "When static content is already accelerated but dynamic requests remain slow, examine the distance a request must travel and how users are directed to regions.",
+    "reference": "Concept: Global latency and region selection | Scenario: Slow dynamic requests from Europe"
+  },
+  {
+    "id": "CC-022",
+    "domain": "Cloud Computing",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "During traffic spikes, a Lambda function inserting rows into MySQL intermittently fails with 'too many connections' on a small RDS instance. Concurrency scales rapidly and every invocation opens a fresh connection. What is the most appropriate fix?",
+    "options": [
+      "Increase the S3 bucket size",
+      "Add more NAT Gateways",
+      "Lower the RDS storage allocation",
+      "Use RDS Proxy to pool and multiplex connections, and reuse connections inside the function"
+    ],
+    "correct_index": 3,
+    "explanation": "Lambda concurrency can create far more simultaneous database sessions than a small RDS instance allows. RDS Proxy sits between the function and the database, pooling connections and enforcing limits, while reusing a connection across warm invocations reduces churn. Bucket size, NAT gateway count, and storage allocation do not affect the connection ceiling.",
+    "hint": "The failure concerns concurrent sessions rather than bytes of throughput, so look for a layer that multiplexes short-lived clients onto a smaller set of database sessions.",
+    "reference": "Concept: Database connection management in serverless | Scenario: RDS connection exhaustion"
+  },
+  {
+    "id": "CC-023",
+    "domain": "Cloud Computing",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A new Auto Scaling group launches instances that pass EC2 status checks but are terminated roughly 40 seconds after registering with an Application Load Balancer. Application logs show no crash. What is the most likely cause?",
+    "options": [
+      "The instances are spread across different Availability Zones",
+      "The load balancer health check path or port does not match the application's real health endpoint",
+      "The AMI has no SSH key pair associated",
+      "The Auto Scaling group uses Spot Instances"
+    ],
+    "correct_index": 1,
+    "explanation": "EC2 status checks confirm the VM and its OS are reachable, but load balancer health checks validate an application endpoint. If the configured path, port, or expected status code is wrong, targets are marked unhealthy and the Auto Scaling group replaces them in a loop. AZ distribution, a missing SSH key, and Spot capacity do not cause systematic application-health failures.",
+    "hint": "Distinguish infrastructure health from application health: the machine is alive, yet something decides it is not ready to serve traffic.",
+    "reference": "Concept: ELB health checks and ASG replacement | Scenario: Repeated instance termination after registration"
+  },
+  {
+    "id": "CC-024",
+    "domain": "Cloud Computing",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A DynamoDB table storing sensor readings uses the sensor reading's UTC date as its partition key. Writes are throttled at peak hours despite low total throughput and on-demand capacity. What is the root cause?",
+    "options": [
+      "The table lacks a sort key",
+      "Point-in-time recovery is disabled",
+      "All writes for a given date map to one partition, creating a hot partition",
+      "Streams are enabled on the table"
+    ],
+    "correct_index": 2,
+    "explanation": "DynamoDB hashes the partition key to spread items across physical partitions, so a low-cardinality, time-based key such as a date concentrates many writes into one partition and exhausts its throughput even when table-wide capacity is ample. Adding a high-cardinality component or randomized time bucket distributes the load. A missing sort key, disabled recovery, or enabled streams do not throttle writes.",
+    "hint": "Think about how the partition key is hashed: if many writes share the same key value, capacity cannot be spread across the backend.",
+    "reference": "Concept: DynamoDB partition key design | Scenario: Hot partition throttling"
+  },
+  {
+    "id": "CC-025",
+    "domain": "Cloud Computing",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "An application uses a Route 53 failover record with a 60-second TTL. After the primary endpoint fails and the standby becomes active, some users still reach the failed endpoint for several minutes. What best explains this?",
+    "options": [
+      "Route 53 health checks run only once every 24 hours",
+      "The standby record has a lower priority than the primary",
+      "CloudFront caches DNS answers for the application",
+      "Recursive resolvers and clients retain the old DNS answer until its TTL expires"
+    ],
+    "correct_index": 3,
+    "explanation": "DNS TTLs are upper bounds honored by downstream recursive resolvers and operating systems, which may keep serving a cached address after the authoritative record changes. Route 53 health checks run roughly every 10 to 30 seconds, so detection is not the bottleneck; pre-emptively lowering the TTL narrows the stale window. Failover priority decides which record is active but cannot force caches to refresh.",
+    "hint": "Consider who besides the authoritative name server stores the answer and how long each cache is permitted to keep it.",
+    "reference": "Concept: DNS TTL and failover propagation | Scenario: Stale endpoints after Route 53 failover"
+  },
+  {
+    "id": "CC-026",
+    "domain": "Cloud Computing",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "A business requires a recovery time objective under one minute with minimal data loss for a critical API and is willing to fund continuously running capacity in two regions. Which disaster recovery strategy best fits?",
+    "options": [
+      "Backup and restore from nightly snapshots stored in S3",
+      "Pilot light with a small core environment scaled out on demand",
+      "Multi-site active-active with continuously replicated data and global traffic routing",
+      "Cold standby built from infrastructure as code only after a failure is detected"
+    ],
+    "correct_index": 2,
+    "explanation": "Active-active multi-region keeps full capacity in two regions with continuously or near-real-time replicated data, such as global tables or cross-region database replicas, and uses global routing to direct traffic, delivering the lowest RTO and RPO at the highest cost. Backup/restore and cold standby imply recovery times of minutes to hours. Pilot light narrows that gap but still needs a scale-up step and does not serve production traffic from both regions simultaneously.",
+    "hint": "Match the tightest recovery objectives with the posture that keeps both production-equivalent capacity and synchronized state available at all times.",
+    "reference": "Concept: Disaster recovery strategies and RTO/RPO | Scenario: Near-zero RTO critical API"
+  },
+  {
+    "id": "CC-027",
+    "domain": "Cloud Computing",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "A data lake holds petabytes of logs with unpredictable access: some objects are read daily, others not for months, and the team cannot predict which is which. Which S3 storage class minimizes cost without introducing retrieval-latency surprises?",
+    "options": [
+      "S3 Intelligent-Tiering",
+      "S3 Glacier Deep Archive",
+      "S3 Standard-IA",
+      "S3 Reduce Redundancy"
+    ],
+    "correct_index": 0,
+    "explanation": "S3 Intelligent-Tiering monitors access patterns and automatically moves objects between frequent and infrequent access tiers, with an optional archive tier, and automatic moves carry no retrieval fees. Glacier Deep Archive has hour-scale restore times, Standard-IA charges per-GB retrieval fees that punish unpredictable reads, and the legacy Reduce Redundancy class stores data in a single AZ with lower durability.",
+    "hint": "Choose the tier whose placement adapts to observed usage rather than demanding that you predict each object's access pattern in advance.",
+    "reference": "Concept: S3 tiering and lifecycle economics | Scenario: Unpredictable analytics data access"
+  },
+  {
+    "id": "CC-028",
+    "domain": "Cloud Computing",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "You are debugging intermittent failures affecting 5 to 10 percent of requests to a TCP service behind a Network Load Balancer. Instances span three Availability Zones, cross-zone load balancing is off, and each host firewall allows only its own subnet CIDR. What is the likely cause?",
+    "options": [
+      "The load balancer has no active listener",
+      "The target group health check interval is too long",
+      "The instances were launched in public subnets",
+      "Traffic arriving from load balancer nodes in another AZ uses source IPs outside the target's allowed CIDR and is dropped"
+    ],
+    "correct_index": 3,
+    "explanation": "When cross-zone load balancing is disabled, NLB nodes forward traffic to targets in the same AZ, but health checks and client flows can arrive with source addresses from other subnet CIDRs. If each host firewall permits only its own AZ's range, those flows are silently dropped, producing AZ-correlated partial failures rather than a total outage. Enabling cross-zone load balancing and widening firewall rules to all relevant subnet CIDRs resolves the issue.",
+    "hint": "Partial failures correlated with availability zones often mean a stateful filter is rejecting traffic based on source address; consider where the traffic originates relative to where it lands.",
+    "reference": "Concept: NLB cross-zone behavior and host firewalls | Scenario: Intermittent cross-AZ drops"
+  },
+  {
+    "id": "CC-029",
+    "domain": "Cloud Computing",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "A security team requires that EC2 instances in a private subnet reach both Amazon S3 and a third-party SaaS API without traversing the public internet or using NAT Gateways. Which combination meets both needs?",
+    "options": [
+      "An Internet Gateway with tighter security group rules",
+      "An S3 gateway endpoint for S3 and an interface endpoint powered by PrivateLink for the SaaS API",
+      "A VPC peering connection to the SaaS provider's network",
+      "A CloudFront distribution with an S3 origin"
+    ],
+    "correct_index": 1,
+    "explanation": "A gateway endpoint routes S3-bound traffic inside the AWS network using prefix-list entries in the subnet route table, with no data-processing charge. Interface endpoints backed by AWS PrivateLink give supported third-party services private IPs and DNS names, keeping that traffic off the internet as well. An Internet Gateway still relies on public addressing, peering needs compatible CIDRs and provider cooperation, and CloudFront accelerates content delivery rather than providing private egress.",
+    "hint": "Different destinations expose private connectivity through different endpoint mechanisms: one is addressed by service prefixes in a route table, the other by an elastic network interface and private DNS.",
+    "reference": "Concept: VPC endpoints and AWS PrivateLink | Scenario: Private egress to S3 and SaaS"
+  },
+  {
+    "id": "CC-030",
+    "domain": "Cloud Computing",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "A global application uses DynamoDB Global Tables in two active-active regions with latency-based routing. During a network partition, both regions accept writes to the same item. What must the architecture account for?",
+    "options": [
+      "The DNS routing service automatically merges conflicting field values",
+      "DynamoDB rejects the second concurrent write with an HTTP 409 error",
+      "Conflicts resolve by last writer wins, so the application should use item versioning or conditional logic to avoid lost updates",
+      "Edge cache invalidations replay the losing write to the other region"
+    ],
+    "correct_index": 2,
+    "explanation": "Global Tables use asynchronous multi-master replication with last-writer-wins conflict resolution based on timestamps, so simultaneous updates to the same item can cause one region's values to overwrite the other's. Applications should use version attributes, condition expressions, or commutative updates to detect or avoid lost updates. DNS only routes traffic and DynamoDB does not reject concurrent writes for this reason.",
+    "hint": "In multi-master replication, ask what rule decides the final value when two disconnected regions accept conflicting updates, and how business data can be protected from silent overwrites.",
+    "reference": "Concept: Global Tables conflict resolution | Scenario: Active-active writes during partition"
+  }
+]

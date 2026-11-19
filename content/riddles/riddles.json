@@ -1,0 +1,156 @@
+[
+  {
+    "id": "R01",
+    "category": "AI",
+    "question": "I study the answer key so hard that I fail the new questions. What AI flaw am I?",
+    "answer": "Overfitting",
+    "explanation": "I ace the training set but flub unseen data, like memorizing last year's exam."
+  },
+  {
+    "id": "R02",
+    "category": "AI",
+    "question": "I split unlabeled data into groups by similarity without ever using labels. What task am I?",
+    "answer": "Clustering",
+    "explanation": "Clustering groups by similarity, not by labels—a party where guests find their own tables."
+  },
+  {
+    "id": "R03",
+    "category": "AI",
+    "question": "I am the algorithm that sends a network's mistakes backward so tomorrow's weights regret today's error. What am I?",
+    "answer": "Backpropagation",
+    "explanation": "Backpropagation sends error gradients backward to update weights, letting the network learn from its own 'oops'."
+  },
+  {
+    "id": "R04",
+    "category": "AI",
+    "question": "I turn words into numbers that remember who sat next to whom. What am I?",
+    "answer": "Word embedding",
+    "explanation": "A word embedding maps words into vectors where neighborhood means meaning, so related terms sit together at the vector party."
+  },
+  {
+    "id": "R05",
+    "category": "AI",
+    "question": "I train an agent with treats and tiny punishments instead of an answer key. What am I?",
+    "answer": "Reinforcement learning",
+    "explanation": "The agent explores, collects rewards, and updates its policy like a pet learning which tricks pay."
+  },
+  {
+    "id": "R06",
+    "category": "Cloud",
+    "question": "I am the cloud service model that lets you rent whole computers, minus the fans and the dust. What am I?",
+    "answer": "Infrastructure as a Service (IaaS)",
+    "explanation": "IaaS rents virtual machines and storage instead of a physical server you have to babysit."
+  },
+  {
+    "id": "R07",
+    "category": "Cloud",
+    "question": "I deliver a ready-made app over the internet, so you never copy an installer or babysit updates. Which cloud service model am I?",
+    "answer": "Software as a Service (SaaS)",
+    "explanation": "SaaS keeps the app in the cloud and the updates off your to-do list."
+  },
+  {
+    "id": "R08",
+    "category": "Cloud",
+    "question": "I am the cloud's elastic waistband: I stretch when traffic arrives and shrink when it leaves. What am I?",
+    "answer": "Auto scaling",
+    "explanation": "Auto scaling adjusts capacity on demand, like software that loosens its belt at a buffet."
+  },
+  {
+    "id": "R09",
+    "category": "Cloud",
+    "question": "I spread your request across many servers so no single one gets stage fright. What am I?",
+    "answer": "Load balancer",
+    "explanation": "A load balancer shares the spotlight so every server gets a manageable encore."
+  },
+  {
+    "id": "R10",
+    "category": "Cloud",
+    "question": "I keep copies of your website near users worldwide so pixels don't take a long flight. What am I?",
+    "answer": "Content Delivery Network (CDN)",
+    "explanation": "A CDN caches content at edge locations, turning a transcontinental download into a local errand."
+  },
+  {
+    "id": "R11",
+    "category": "OS",
+    "question": "I am the traffic police of the CPU, deciding which process gets the green light. What am I?",
+    "answer": "CPU scheduler",
+    "explanation": "The scheduler picks the next process to run, directing traffic at the processor intersection."
+  },
+  {
+    "id": "R12",
+    "category": "OS",
+    "question": "I give each program its own private address book, even when they all live in the same memory building. What am I?",
+    "answer": "Virtual memory",
+    "explanation": "Virtual memory maps each process to its own address space, so everyone thinks they own the building."
+  },
+  {
+    "id": "R13",
+    "category": "OS",
+    "question": "I save a paused process's exact spot so it can resume later as if it never left. What am I?",
+    "answer": "Context switch",
+    "explanation": "A context switch stores and restores a process's state, the OS equivalent of a bookmark in a video."
+  },
+  {
+    "id": "R14",
+    "category": "OS",
+    "question": "I am the OS's filing cabinet: I turn filenames into places on a disk. What am I?",
+    "answer": "File system",
+    "explanation": "A file system maps human-readable names to bytes on storage, keeping the cabinet from becoming a pile."
+  },
+  {
+    "id": "R15",
+    "category": "DBMS",
+    "question": "I am a table's ID card: unique, non-null, and impossible to mistake for someone else. What am I?",
+    "answer": "Primary key",
+    "explanation": "A primary key uniquely identifies each row—no duplicates, no blank badges."
+  },
+  {
+    "id": "R16",
+    "category": "DBMS",
+    "question": "I am the database's undo with a memory: I record every change before it lands so a crash can be reasoned with. What am I?",
+    "answer": "Write-ahead log (WAL)",
+    "explanation": "A WAL records the intended change before applying it, so recovery can replay or roll back safely."
+  },
+  {
+    "id": "R17",
+    "category": "DBMS",
+    "question": "I answer the question 'which rows?' without reading every single page of the book. What am I?",
+    "answer": "Index",
+    "explanation": "An index is a database table of contents, skipping straight to matching rows instead of scanning the whole chapter."
+  },
+  {
+    "id": "R18",
+    "category": "DBMS",
+    "question": "I keep two tables honest by refusing a row unless its matching row exists elsewhere. What am I?",
+    "answer": "Foreign key",
+    "explanation": "A foreign key points to a valid row in another table, like a club membership checked against the roster."
+  },
+  {
+    "id": "R19",
+    "category": "General CS",
+    "question": "I repeat a task by calling myself with a smaller problem until the smallest problem finally says 'done.' What am I?",
+    "answer": "Recursion",
+    "explanation": "Recursion solves by shrinking the problem and calling itself, like nested dolls that know when to stop."
+  },
+  {
+    "id": "R20",
+    "category": "General CS",
+    "question": "I am a list where you take from one end and add at the other, like students at a canteen counter. What am I?",
+    "answer": "Queue",
+    "explanation": "A queue is first-in, first-out; the first student served is the first who joined."
+  },
+  {
+    "id": "R21",
+    "category": "General CS",
+    "question": "I turn a tangled mess of nodes and edges into a map of who connects to whom. What am I?",
+    "answer": "Graph",
+    "explanation": "A graph models relationships as vertices and edges, making social chaos look like a tidy subway map."
+  },
+  {
+    "id": "R22",
+    "category": "General CS",
+    "question": "I fetch, decode, execute, then do it again—the CPU's heartbeat. What am I?",
+    "answer": "Fetch-decode-execute cycle",
+    "explanation": "The CPU repeats this loop so tirelessly that even coffee would ask for a break."
+  }
+]

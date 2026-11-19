@@ -1,0 +1,542 @@
+[
+  {
+    "id": "AI-001",
+    "domain": "Artificial Intelligence",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "A team builds a model that predicts house prices from a dataset where each record already includes the actual sale price. Which machine learning paradigm does this represent?",
+    "options": [
+      "Unsupervised clustering",
+      "Supervised regression",
+      "Reinforcement learning",
+      "Self-supervised masked prediction"
+    ],
+    "correct_index": 1,
+    "explanation": "Supervised learning uses input-output pairs where the correct output is supplied during training. Because the target (sale price) is a continuous numeric value rather than a category, the task is specifically regression. Reinforcement learning instead relies on reward feedback from an environment, and self-supervised methods derive targets from the data itself.",
+    "hint": "Think about whether a target signal is available during training and whether the predicted quantity is discrete or continuous.",
+    "reference": "Concept: Supervised vs unsupervised vs reinforcement learning | Scenario: House price dataset with labeled prices"
+  },
+  {
+    "id": "AI-002",
+    "domain": "Artificial Intelligence",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "An analyst groups customers into segments based only on purchase history, with no pre-existing labels telling her which segment each customer belongs to. What type of learning is this?",
+    "options": [
+      "Classification",
+      "Regression",
+      "Clustering (unsupervised learning)",
+      "Q-learning"
+    ],
+    "correct_index": 2,
+    "explanation": "With no labels, the algorithm must discover structure in the data itself, and grouping similar records is the task of clustering. Classification and regression both require labeled targets. Q-learning is a reinforcement technique that depends on environmental rewards, not on unlabeled customer records.",
+    "hint": "Consider what information the algorithm is given: if there is no target column, the algorithm must find hidden structure on its own.",
+    "reference": "Concept: Unsupervised learning and clustering | Scenario: Customer segmentation from purchase histories"
+  },
+  {
+    "id": "AI-003",
+    "domain": "Artificial Intelligence",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "In a reinforcement learning setup, an agent receives a numerical score after each action that reflects how desirable that action was. What is this feedback signal called?",
+    "options": [
+      "Reward",
+      "Loss",
+      "Feature",
+      "Prior"
+    ],
+    "correct_index": 0,
+    "explanation": "In reinforcement learning, the environment emits a reward after each action, and the agent learns a policy that maximizes expected cumulative reward. A loss measures prediction error in supervised training, a feature is an input attribute, and a prior is a probability distribution over model parameters.",
+    "hint": "Ask what the environment gives back to the agent after it acts, rather than what the model computes internally.",
+    "reference": "Concept: RL components (agent, environment, reward) | Scenario: Agent receiving per-action score"
+  },
+  {
+    "id": "AI-004",
+    "domain": "Artificial Intelligence",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "A model achieves 55% accuracy on both its training set and a held-out validation set. Which statement best characterizes this model?",
+    "options": [
+      "It has low bias and high variance",
+      "It is overfitting",
+      "It has memorized the training data",
+      "It has high bias and is likely underfitting"
+    ],
+    "correct_index": 3,
+    "explanation": "When training and validation errors are both high and close together, the model is too simple to capture the underlying pattern: classic underfitting, or high bias. Overfitting instead produces low training error but much higher validation error. Memorization would likewise show a large gap between the two scores.",
+    "hint": "Compare the two error values: both high and nearly equal suggests the model lacks capacity, while a large gap points to a different problem.",
+    "reference": "Concept: Bias-variance tradeoff | Scenario: Training and validation accuracy both 55%"
+  },
+  {
+    "id": "AI-005",
+    "domain": "Artificial Intelligence",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "During gradient descent training, the loss oscillates wildly and fails to settle. Which hyperparameter is most directly responsible for this behaviour?",
+    "options": [
+      "Number of training epochs",
+      "Learning rate",
+      "Batch size only",
+      "Activation threshold"
+    ],
+    "correct_index": 1,
+    "explanation": "The learning rate sets the step size along the negative gradient; if it is too large, the optimizer overshoots the minimum and can oscillate or diverge. Epochs determine how long training runs but not the size of each step. Batch size affects gradient noise, but systematic oscillation and divergence are primarily a step-size problem.",
+    "hint": "Think about which knob sets how far the parameters move on each update.",
+    "reference": "Concept: Gradient descent and learning rate | Scenario: Oscillating training loss curve"
+  },
+  {
+    "id": "AI-006",
+    "domain": "Artificial Intelligence",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "What is the primary purpose of k-fold cross-validation?",
+    "options": [
+      "To obtain a more reliable estimate of model performance on unseen data",
+      "To increase the number of training samples available",
+      "To reduce the dimensionality of the feature space",
+      "To guarantee that a model will never overfit"
+    ],
+    "correct_index": 0,
+    "explanation": "K-fold cross-validation partitions data into k subsets, trains on k-1 folds, and validates on the held-out fold in turn, then averages the results. This gives a more robust estimate of generalization and reduces dependence on a single lucky split. It does not literally create data, remove features, or guarantee that overfitting cannot occur.",
+    "hint": "Focus on what changes across folds and what statistic the final averaged number is meant to approximate.",
+    "reference": "Concept: Cross-validation | Scenario: Data split into k rotating train/validation partitions"
+  },
+  {
+    "id": "AI-007",
+    "domain": "Artificial Intelligence",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Which activation function returns the input for positive values and zero for negative values, and is widely used in deep networks for its computational efficiency?",
+    "options": [
+      "Sigmoid",
+      "Tanh",
+      "ReLU",
+      "Softmax"
+    ],
+    "correct_index": 2,
+    "explanation": "ReLU (Rectified Linear Unit) is defined as max(0, x); it is cheap to compute and helps mitigate vanishing gradients on the positive side. Sigmoid and tanh saturate at both extremes, which can slow learning in deep stacks. Softmax is normally applied at the output layer to produce multi-class probabilities.",
+    "hint": "Picture the graph: a flat line on the left and a straight 45-degree line on the right.",
+    "reference": "Concept: Activation functions | Scenario: Piecewise-linear response curve"
+  },
+  {
+    "id": "AI-008",
+    "domain": "Artificial Intelligence",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "In a convolutional neural network, what is the main purpose of a convolution operation?",
+    "options": [
+      "To flatten the image into a single vector",
+      "To increase the number of colour channels",
+      "To randomly drop connections between layers",
+      "To extract local spatial features such as edges and textures using shared filters"
+    ],
+    "correct_index": 3,
+    "explanation": "Convolution slides learned filters across the input, detecting local patterns such as edges while sharing weights across positions, which greatly reduces the parameter count. Flattening happens later before dense layers. Convolution does not inherently add colour channels, and randomly dropping connections is the role of dropout.",
+    "hint": "Consider what a small learned window sliding over an image can detect, and why reusing that window is parameter-efficient.",
+    "reference": "Concept: CNN convolution and weight sharing | Scenario: Filter sliding over an image grid"
+  },
+  {
+    "id": "AI-009",
+    "domain": "Artificial Intelligence",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "Before an LLM processes text, the text is split into smaller units called tokens. Which statement about tokenization is correct?",
+    "options": [
+      "Tokens are always whole words",
+      "The same text can yield a different number of tokens under different tokenizers",
+      "Tokenization happens after the model produces its output",
+      "Every token corresponds to exactly one character"
+    ],
+    "correct_index": 1,
+    "explanation": "Different tokenizers use different vocabularies and schemes such as word pieces or byte-pair encoding, so token counts vary across models. Tokens may be subwords, whole words, or single characters depending on the tokenizer. Tokenization is a preprocessing step performed before the model, not a post-processing step.",
+    "hint": "Think about whether token boundaries are universal or defined by the vocabulary of the specific model being used.",
+    "reference": "Concept: Tokenization in LLMs | Scenario: Same sentence encoded by two different tokenizers"
+  },
+  {
+    "id": "AI-010",
+    "domain": "Artificial Intelligence",
+    "round": 1,
+    "difficulty": "Basic",
+    "marks": 10,
+    "question": "A hiring model trained on ten years of past hiring decisions begins to down-rank applications from a group that was historically under-hired. What is the most likely cause?",
+    "options": [
+      "The model learned historical bias embedded in the training labels",
+      "The model has too many parameters",
+      "The activation function saturates",
+      "The learning rate is too small"
+    ],
+    "correct_index": 0,
+    "explanation": "A supervised model learns the statistical patterns present in its labels, including discriminatory patterns in historical decisions. This is bias amplification: without auditing and mitigation, a model can reproduce or even intensify past inequity. Model size, activation saturation, and learning rate are not explanatory here because the behaviour traces back to the target the model was trained to imitate.",
+    "hint": "Ask what the model was asked to imitate, and whether that target itself reflected fair decisions.",
+    "reference": "Concept: Algorithmic bias and fairness | Scenario: Hiring model trained on historical decisions"
+  },
+  {
+    "id": "AI-011",
+    "domain": "Artificial Intelligence",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "During training, a model's loss on the training set keeps decreasing while its validation loss begins to rise after epoch 12. Which explanation best fits this behaviour?",
+    "options": [
+      "The learning rate is too small",
+      "The model is underfitting",
+      "The model has begun to memorize training-specific noise and is overfitting",
+      "The dataset is too small to compute a loss"
+    ],
+    "correct_index": 2,
+    "explanation": "A widening gap between falling training loss and rising validation loss is the signature of overfitting: the model is capturing noise or idiosyncrasies of the training set that do not generalize. Underfitting would show high loss on both sets. A too-small learning rate would slow learning rather than create divergence between the curves, and dataset size does not prevent loss computation.",
+    "hint": "Look at the direction of each curve, not just their absolute values: what does a widening gap between them imply about generalization?",
+    "reference": "Concept: Overfitting detection via learning curves | Scenario: Training loss down, validation loss up after epoch 12"
+  },
+  {
+    "id": "AI-012",
+    "domain": "Artificial Intelligence",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A network is described as follows: an input grid is passed through several small learned filters, each followed by a downsampling operation, then the resulting maps are flattened and fed into a classifier. Which architecture is this?",
+    "options": [
+      "Convolutional Neural Network",
+      "Vanilla recurrent network",
+      "Autoencoder without a bottleneck",
+      "Fully connected perceptron with no hidden layers"
+    ],
+    "correct_index": 0,
+    "explanation": "Stacked convolutional filters with pooling followed by dense classification layers is the canonical CNN pattern for grid-like data such as images. A recurrent network processes sequences through hidden state over time. An autoencoder reconstructs its input, and a perceptron without hidden layers has no spatial feature extraction stages at all.",
+    "hint": "The repeated use of small shared filters and downsampling is a strong structural clue; what kind of data has spatial locality worth preserving?",
+    "reference": "Concept: CNN architecture sketch | Scenario: Grid input to filters to pooling to classifier"
+  },
+  {
+    "id": "AI-013",
+    "domain": "Artificial Intelligence",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "You observe a model that produces a sentence one word at a time, and at each step it conditions only on a fixed-size vector summarizing the entire prior sentence. Which architecture family does this describe?",
+    "options": [
+      "A CNN with global pooling",
+      "A transformer with full self-attention over all prior tokens",
+      "A decision tree ensemble",
+      "An encoder-decoder recurrent network without attention"
+    ],
+    "correct_index": 3,
+    "explanation": "Compressing the entire input into one fixed vector and decoding word by word is the classic encoder-decoder RNN (seq2seq) design; its weakness is an information bottleneck for long sentences. A transformer instead attends directly to all earlier tokens, so it does not rely on a single summary vector. CNNs and tree ensembles do not generate sequences in this stepwise manner.",
+    "hint": "Ask what information is available at decoding time: is it a single compressed summary or direct access to every earlier element?",
+    "reference": "Concept: Seq2seq bottleneck vs attention | Scenario: Word-by-word generation from a fixed context vector"
+  },
+  {
+    "id": "AI-014",
+    "domain": "Artificial Intelligence",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "In a fraud dataset where only 0.5% of transactions are fraudulent, a classifier achieves 99.5% accuracy by predicting 'not fraud' for every case. Which metric would best expose this failure?",
+    "options": [
+      "Accuracy",
+      "Recall (sensitivity) for the fraud class",
+      "Mean squared error",
+      "Specificity"
+    ],
+    "correct_index": 1,
+    "explanation": "Recall measures the fraction of actual positives that are correctly identified; here it is zero, immediately revealing that no fraud is caught. Accuracy is misleading under severe class imbalance. Mean squared error is a regression metric, and specificity (true negative rate) is already perfect for this trivial always-negative classifier.",
+    "hint": "Which metric asks 'of all the real positive cases, how many did you find?' rather than 'how often were you right overall?'",
+    "reference": "Concept: Precision, recall, and imbalance | Scenario: Always-negative fraud classifier at 99.5% accuracy"
+  },
+  {
+    "id": "AI-015",
+    "domain": "Artificial Intelligence",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A team has a pretrained language model. They see only a modest improvement after writing a better instruction, so they run a few epochs of gradient updates on a small domain-specific corpus. What have they switched to?",
+    "options": [
+      "Zero-shot prompting",
+      "Retrieval-augmented generation without training",
+      "Fine-tuning",
+      "Quantization"
+    ],
+    "correct_index": 2,
+    "explanation": "Fine-tuning continues training the model's weights on task-specific data, whereas prompting only changes the input at inference time and leaves weights untouched. RAG adds external context at query time without updating parameters. Quantization reduces the numerical precision of weights rather than adapting them to a task.",
+    "hint": "The key distinction is whether the model's parameters change. Which approach actually performs optimization steps?",
+    "reference": "Concept: Prompting vs fine-tuning | Scenario: Gradient updates on a domain corpus"
+  },
+  {
+    "id": "AI-016",
+    "domain": "Artificial Intelligence",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "A chatbot gives answers grounded in recent internal documents that were not part of its original training, and it cites those documents in its reply. Which technique most likely produced this behaviour?",
+    "options": [
+      "Pure zero-shot generation",
+      "Model distillation",
+      "Weight pruning",
+      "Retrieval-augmented generation"
+    ],
+    "correct_index": 3,
+    "explanation": "RAG retrieves relevant external documents at query time and inserts them into the prompt so the model can ground its answer in up-to-date information. Distillation transfers knowledge into a smaller model, and pruning removes weights. Zero-shot generation has access only to parametric knowledge acquired during training, not to post-training documents.",
+    "hint": "If the knowledge appeared after training and is cited in the answer, where did the model get it? Think about information supplied at query time.",
+    "reference": "Concept: Retrieval-augmented generation | Scenario: Chatbot citing recent internal documents"
+  },
+  {
+    "id": "AI-017",
+    "domain": "Artificial Intelligence",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "In a GAN, the discriminator has become so strong that it perfectly separates real from generated samples, leaving the generator with near-zero useful gradients. What is the central training difficulty being observed?",
+    "options": [
+      "Vanishing gradients for the generator due to discriminator dominance",
+      "Exploding gradients in the discriminator",
+      "Label smoothing of real labels",
+      "Weight sharing between generator and discriminator"
+    ],
+    "correct_index": 0,
+    "explanation": "GAN training relies on a balanced adversarial game; if the discriminator is far ahead, its outputs saturate and the generator receives a weak or vanishing gradient signal. Techniques such as label smoothing, adjusted update ratios, or non-saturating losses are remedies used to keep the game balanced. Label smoothing is therefore a fix, not the observed failure.",
+    "hint": "Think of training as a two-player game: what happens to the weaker player's learning signal when the stronger player wins every round decisively?",
+    "reference": "Concept: GAN adversarial balance | Scenario: Perfect discriminator, stalled generator"
+  },
+  {
+    "id": "AI-018",
+    "domain": "Artificial Intelligence",
+    "round": 2,
+    "difficulty": "Intermediate",
+    "marks": 10,
+    "question": "An LLM's outputs become noticeably more repetitive and conservative after an engineer lowers the sampling temperature from 1.0 to 0.2. Which statement explains this?",
+    "options": [
+      "Lower temperature increases the entropy of the token distribution",
+      "Lower temperature sharpens the probability distribution, favouring high-probability tokens",
+      "Temperature changes the model's vocabulary size",
+      "Temperature only affects training, not inference"
+    ],
+    "correct_index": 1,
+    "explanation": "Temperature divides the logits by a value before softmax is applied; lowering it below 1 makes the distribution more peaked, so sampling concentrates on the most likely tokens and output becomes more deterministic. Raising temperature flattens the distribution and increases diversity. Temperature is an inference-time control and does not alter the vocabulary.",
+    "hint": "Consider what dividing logits by a number less than one does to the gaps between them before softmax is applied.",
+    "reference": "Concept: Temperature sampling in LLMs | Scenario: Temperature reduced from 1.0 to 0.2"
+  },
+  {
+    "id": "AI-019",
+    "domain": "Artificial Intelligence",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A team is training a 30-layer network with sigmoid activations. The earliest layers' weights barely change after many epochs while deeper layers learn quickly. Which intervention most directly addresses the observed problem?",
+    "options": [
+      "Increase the number of parameters in the output layer",
+      "Use a larger batch size to reduce gradient noise",
+      "Apply L2 regularization to all layers",
+      "Replace saturating activations with ReLU variants and add residual (skip) connections"
+    ],
+    "correct_index": 3,
+    "explanation": "Sigmoid saturates for large-magnitude inputs, producing derivatives near zero; across many layers these small derivatives multiply and gradients vanish at early layers. ReLU-family activations keep gradients alive on the positive side, and residual connections give gradients a direct path through the network. The other options change capacity, noise, or regularization but do not repair the gradient flow.",
+    "hint": "Trace how a gradient propagates backwards: what happens when it must repeatedly multiply by small numbers, and how could you create a shortcut?",
+    "reference": "Concept: Vanishing gradients, ReLU, residual connections | Scenario: 30-layer sigmoid network with frozen early layers"
+  },
+  {
+    "id": "AI-020",
+    "domain": "Artificial Intelligence",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A model had strong validation metrics but its live prediction quality degrades steadily over several months even though the code and model file are unchanged. What is the most likely explanation and appropriate response?",
+    "options": [
+      "Data or concept drift has shifted the input distribution or target relationship; monitor drift and retrain on recent data",
+      "The model architecture is too deep; replace it with a deeper one",
+      "The validation set was too large; shrink it",
+      "The optimizer failed to converge; increase epochs in production"
+    ],
+    "correct_index": 0,
+    "explanation": "When the model and code are fixed but performance decays with time, the underlying data distribution or the mapping from inputs to targets has changed: data drift or concept drift. The correct response is drift monitoring plus retraining on fresh labeled data. Architecture changes and extra epochs are training-time fixes that cannot address a shifting production environment.",
+    "hint": "If nothing in the pipeline changed but the world did, which part of the system is the likely source of the change?",
+    "reference": "Concept: Data drift and concept drift | Scenario: Gradual production accuracy decay with static model"
+  },
+  {
+    "id": "AI-021",
+    "domain": "Artificial Intelligence",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A transformer-based service runs out of GPU memory when documents grow from 2,000 to 16,000 tokens. Standard self-attention computes an N by N score matrix. Which approach best targets the root cause?",
+    "options": [
+      "Increase the dropout rate",
+      "Use a sparse or linear attention variant, or chunking, so attention cost grows sub-quadratically with sequence length",
+      "Reduce the vocabulary size",
+      "Train for more epochs"
+    ],
+    "correct_index": 1,
+    "explanation": "Full self-attention stores and computes O(N^2) scores, so an eightfold longer sequence needs roughly 64 times the attention memory. Sparse, low-rank, or chunked attention mechanisms reduce that growth to near-linear or otherwise sub-quadratic, directly addressing the bottleneck. Dropout, vocabulary size, and training duration do not change attention's fundamental memory scaling.",
+    "hint": "Work out how the size of the attention matrix grows with sequence length, then ask which change alters that growth law rather than just shrinking constants.",
+    "reference": "Concept: Self-attention complexity | Scenario: Token length increased from 2k to 16k"
+  },
+  {
+    "id": "AI-022",
+    "domain": "Artificial Intelligence",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A diffusion model produces high-quality images but needs 1,000 denoising steps per image, which is too slow for an interactive app. Which technique is designed to cut the number of sampling steps with minimal quality loss?",
+    "options": [
+      "Increase the noise schedule variance",
+      "Add more U-Net parameters",
+      "Use a deterministic accelerated sampler such as DDIM, or a distilled fast solver",
+      "Lower the classifier-free guidance scale to zero"
+    ],
+    "correct_index": 2,
+    "explanation": "DDIM reformulates the reverse process to permit large jumps, allowing good samples in far fewer steps; distillation and dedicated solvers achieve similar speedups. Adding U-Net parameters increases compute per step without reducing the step count. Altering the noise schedule or guidance scale changes sample characteristics, not the number of denoising iterations.",
+    "hint": "The cost is proportional to the number of reverse-process steps; which family of methods changes the solver rather than the model size?",
+    "reference": "Concept: Diffusion sampling acceleration | Scenario: 1,000-step image generation too slow"
+  },
+  {
+    "id": "AI-023",
+    "domain": "Artificial Intelligence",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A binary classifier for a rare disease achieves high precision but recalls only 12% of positive cases. The team wants to improve recall without simply lowering the decision threshold. Which training-time intervention is most appropriate?",
+    "options": [
+      "Remove all negative examples from the training set",
+      "Duplicate only the negative class examples",
+      "Switch from cross-entropy to mean squared error",
+      "Apply class-weighted loss or resample the minority class, for example with SMOTE"
+    ],
+    "correct_index": 3,
+    "explanation": "Class weighting or minority oversampling makes the optimizer pay more attention to the rare positive class, which typically improves its recall. Removing negatives destroys discriminative ability, and duplicating negatives worsens the imbalance. Mean squared error is a poor objective for probability estimation in classification compared with cross-entropy.",
+    "hint": "Consider how the loss aggregates errors across classes: what change would make a missed positive more expensive during training?",
+    "reference": "Concept: Class imbalance handling | Scenario: Rare-disease classifier with 12% recall"
+  },
+  {
+    "id": "AI-024",
+    "domain": "Artificial Intelligence",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "A RAG pipeline retrieves documents, yet the model still states facts that appear nowhere in them. Logs show the retrieved passages are topically related but do not contain the specific answer. What is the best first fix?",
+    "options": [
+      "Improve retrieval quality, for example better chunking, embeddings, or reranking, and explicitly instruct the model to answer only from supplied context",
+      "Raise the LLM temperature to encourage creativity",
+      "Remove the retrieved context from the prompt",
+      "Train the model on more unrelated documents"
+    ],
+    "correct_index": 0,
+    "explanation": "If retrieved passages lack the answer, the generator cannot be grounded in them and falls back on parametric knowledge, producing hallucinations. The first fix is to improve retrieval through chunking, embeddings, hybrid search, or reranking, and to enforce grounded answering with strict instructions. Raising temperature or removing context weakens grounding further.",
+    "hint": "Separate the two stages: before blaming the generator, check whether the information needed for a grounded answer was actually supplied to it.",
+    "reference": "Concept: RAG grounding failures | Scenario: Topically relevant passages without the answer"
+  },
+  {
+    "id": "AI-025",
+    "domain": "Artificial Intelligence",
+    "round": 3,
+    "difficulty": "Advanced",
+    "marks": 10,
+    "question": "An RNN training run shows the loss suddenly jumping to NaN after a few hundred steps, with gradient norms in the thousands. Which mitigation is the standard first line of defence?",
+    "options": [
+      "Reduce the network to a single layer",
+      "Apply gradient clipping",
+      "Replace all biases with zeros",
+      "Increase the learning rate"
+    ],
+    "correct_index": 1,
+    "explanation": "Exploding gradients are handled by clipping the gradient norm or value to a threshold before the optimizer step, preventing any single update from destabilizing the network. This is common in RNNs because repeated multiplication through time can amplify gradients dramatically. Increasing the learning rate would worsen the explosion, and removing layers or zeroing biases does not constrain the update magnitude.",
+    "hint": "When a single update is catastrophically large, what constraint can you place on the update itself without changing the architecture?",
+    "reference": "Concept: Exploding gradients and gradient clipping | Scenario: RNN loss becomes NaN with huge gradient norms"
+  },
+  {
+    "id": "AI-026",
+    "domain": "Artificial Intelligence",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "For a single parameter w, the loss is L(w) = (w - 3)^2. Starting at w = 7 with learning rate 0.1, what is the value of w after one gradient descent step?",
+    "options": [
+      "w = 6.6",
+      "w = 6.8",
+      "w = 6.2",
+      "w = 5.0"
+    ],
+    "correct_index": 2,
+    "explanation": "The derivative is dL/dw = 2(w - 3), which equals 8 at w = 7. Gradient descent subtracts the learning rate times the derivative, so w becomes 7 - 0.1 x 8 = 6.2. The step moves toward the minimizer at w = 3, as expected for a convex quadratic.",
+    "hint": "Compute the derivative explicitly, then remember the update subtracts the learning rate times that derivative.",
+    "reference": "Concept: One-step gradient descent calculation | Scenario: Quadratic loss with w0 = 7, lr = 0.1"
+  },
+  {
+    "id": "AI-027",
+    "domain": "Artificial Intelligence",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "In a scaled dot-product attention head, a query and key have dot product 8 for the first token and 0 for the second, with d_k = 4. Approximately what attention weight does the first token receive after softmax over just these two tokens?",
+    "options": [
+      "About 0.982",
+      "About 0.500",
+      "About 0.750",
+      "About 0.018"
+    ],
+    "correct_index": 0,
+    "explanation": "Scaling divides each dot product by sqrt(d_k) = 2, giving scores of 4 and 0. Softmax then yields e^4 / (e^4 + 1) = 54.6 / 55.6, which is about 0.982. The 1/sqrt(d_k) factor keeps dot products from growing so large that softmax saturates and gradients vanish.",
+    "hint": "Apply the 1/sqrt(d_k) scaling first, then exponentiate the scores and normalize by their sum.",
+    "reference": "Concept: Scaled dot-product attention and softmax | Scenario: Two-key attention with d_k = 4"
+  },
+  {
+    "id": "AI-028",
+    "domain": "Artificial Intelligence",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "For a regression problem, a model has squared bias of 4, variance of 3, and irreducible noise variance of 1. What is the expected mean squared error at a new point?",
+    "options": [
+      "4",
+      "7",
+      "9",
+      "8"
+    ],
+    "correct_index": 3,
+    "explanation": "Expected MSE decomposes as bias squared plus variance plus irreducible noise, so 4 + 3 + 1 = 8. No change to the model can remove the irreducible noise term, making 8 a floor for this setup. Reducing bias or variance can only lower the first two components.",
+    "hint": "Add the three components of the decomposition; one of them cannot be reduced by changing the model.",
+    "reference": "Concept: Bias-variance-noise decomposition | Scenario: bias^2 = 4, variance = 3, noise = 1"
+  },
+  {
+    "id": "AI-029",
+    "domain": "Artificial Intelligence",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "A GAN generates only a handful of near-identical images even though the training set is diverse, and the discriminator loss hovers near log 2. Which diagnosis and fix pair is most appropriate?",
+    "options": [
+      "The discriminator is overfitting; increase its capacity",
+      "The generator has collapsed to a few modes; consider minibatch discrimination, unrolled GANs, or WGAN-GP to encourage diversity",
+      "The learning rate is too low; reduce it further",
+      "The latent vector dimension is too large; reduce it to one"
+    ],
+    "correct_index": 1,
+    "explanation": "Producing a narrow variety of samples despite diverse data is mode collapse: the generator maps many latent codes to similar outputs. Methods such as minibatch discrimination, unrolled optimization, and WGAN-GP give the generator richer gradient signals about covering the data distribution. Increasing discriminator capacity can intensify the imbalance, and a one-dimensional latent space would guarantee even less variety.",
+    "hint": "The symptom concerns output diversity, not accuracy; which fixes change the competitive signal so that covering more of the distribution is rewarded?",
+    "reference": "Concept: GAN mode collapse | Scenario: Near-identical generated images from diverse dataset"
+  },
+  {
+    "id": "AI-030",
+    "domain": "Artificial Intelligence",
+    "round": 4,
+    "difficulty": "Expert",
+    "marks": 10,
+    "question": "A data scientist evaluates a model that forecasts monthly sales by randomly shuffling rows into 5 folds for cross-validation. Validation scores are excellent but live forecasts are poor. Which evaluation design should replace random k-fold?",
+    "options": [
+      "Stratified k-fold with shuffling enabled",
+      "Leave-one-out cross-validation on shuffled rows",
+      "Forward-chaining (rolling-origin) validation that always trains on past months and validates on future months",
+      "Repeated random subsampling with 100 splits"
+    ],
+    "correct_index": 2,
+    "explanation": "Random folds leak future information into training, which is invalid for temporal data because the model can exploit patterns from months that had not yet occurred. Forward-chaining respects the arrow of time by training only on earlier observations and testing on later ones, matching deployment conditions. Stratification, leave-one-out, and repeated random splits all still shuffle across time and retain the same leak.",
+    "hint": "In a forecasting setting, what constraint does the arrow of time place on which observations the model is allowed to learn from?",
+    "reference": "Concept: Time-series validation | Scenario: Monthly sales forecast with shuffled folds"
+  }
+]
