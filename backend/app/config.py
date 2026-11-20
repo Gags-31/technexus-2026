@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     admin_setup_file: str = str(BASE_DIR / ".admin_credentials.txt")
     rate_limit_per_minute: int = 12
     trusted_hosts: str = "*"
-    event_date: str = "2026-12-12"
+    event_date: str = "2026-11-24"
     event_start_time: str = "11:00"
 
     @property
