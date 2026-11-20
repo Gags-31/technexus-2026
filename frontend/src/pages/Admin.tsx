@@ -86,7 +86,7 @@ export default function AdminDashboard() {
       setToast(`${payload.team_name}: ${payload.kind} (${payload.count})`)
       setTimeout(() => setToast(''), 4000)
     }
-    if (['round.changed', 'scoreboard.updated', 'results.published', 'round.ended'].includes(event)) {
+    if (['round.changed', 'scoreboard.updated', 'results.published', 'round.ended', 'event.reset', 'event.restarted'].includes(event)) {
       load('overview'); load('rounds')
       if (section === 'scoreboard') load('scoreboard')
       if (section === 'monitor') load('monitor')

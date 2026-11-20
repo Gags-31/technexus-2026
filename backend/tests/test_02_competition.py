@@ -3,7 +3,10 @@ from __future__ import annotations
 
 from sqlalchemy import select
 
-from app.models import Riddle
+from app.models import (
+    AnswerHistory, Riddle, RiddleAttempt, Score, Team, TeamAnswer,
+    TeamRoundSession, Violation,
+)
 from tests.harness import STATE, SessionLocal, api
 
 
@@ -199,3 +202,49 @@ def test_27_logout_revokes_the_session():
     assert client.get("/api/auth/me").json()["authenticated"] is True
     assert client.post("/api/auth/logout", json={}).status_code == 200
     assert client.get("/api/auth/me").json()["authenticated"] is False
+
+
+def test_28_admin_can_reset_the_event_mid_competition():
+    admin = _admin()
+    # Round 4 is active and results were published by earlier tests.
+    response = admin.post("/api/admin/event/reset", json={})
+    assert response.status_code == 200, response.text
+    payload = response.json()
+    assert payload["reset"] is True
+    assert all(r["status"] == "locked" for r in payload["rounds"])
+    assert all(r["server_start_at"] is None and r["ends_at"] is None for r in payload["rounds"])
+
+    db = SessionLocal()
+    try:
+        for model in (AnswerHistory, TeamAnswer, Score, Violation, RiddleAttempt, TeamRoundSession):
+            assert db.query(model).count() == 0, model.__tablename__
+        assert all(team.shortlisted is False for team in db.scalars(select(Team)).all())
+    finally:
+        db.close()
+
+    assert admin.get("/api/admin/settings").json()["results_published"] is False
+    state = _participant("alpha", "leader").get("/api/participant/state").json()
+    assert "active_round" not in state
+    assert "event.reset" in {row["action"] for row in admin.get("/api/admin/audit-logs").json()}
+
+
+def test_29_participants_cannot_reset_the_event():
+    response = _participant("alpha", "leader").post("/api/admin/event/reset", json={})
+    assert response.status_code == 404
+
+
+def test_30_restart_event_starts_round_one_with_a_fresh_clock():
+    admin = _admin()
+    response = admin.post("/api/admin/event/restart", json={})
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["restarted"] is True
+    state = body["round"]
+    assert state["id"] == 1 and state["status"] == "active" and state["server_start_at"]
+
+    rounds = {r["id"]: r for r in admin.get("/api/admin/rounds").json()}
+    assert rounds[1]["status"] == "active"
+    assert all(rounds[i]["status"] == "locked" for i in (2, 3, 4))
+    participant_state = _participant("alpha", "leader").get("/api/participant/state").json()
+    assert participant_state["active_round"]["id"] == 1
+    assert "event.restarted" in {row["action"] for row in admin.get("/api/admin/audit-logs").json()}

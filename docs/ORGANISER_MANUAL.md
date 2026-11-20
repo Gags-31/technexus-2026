@@ -32,6 +32,14 @@ Private, organiser-only view with correct indices, correct option text, explanat
 ### Round Management
 Start, pause, resume and end R1–R4. Round start records a single server timestamp, creates eligible team sessions, sends identical questions to all eligible teams and locks future rounds. Every action requires confirmation. The server clock auto-ends rounds at the configured deadline and auto-submits saved answers.
 
+### Reset and restart
+**Round Management** also has two event-level controls, available at any time, including while a round is active:
+
+- **Reset event** clears every round clock, answer, score, violation, break guess and shortlist flag, locks all four rounds, hides results, and broadcasts the change to connected participants.
+- **Reset & restart** performs the same reset and immediately starts Round 1 with a fresh authoritative server clock for every eligible team.
+
+Teams, registrations, team codes, questions, riddles, memes, settings and audit logs are preserved. Both actions require a confirmation dialog and are recorded in Audit Logs.
+
 ### Live Competition Monitor
 Shows connected teams, member names, saved/submitted counts, violation counts, active status and review flags in real time via WebSocket.
 

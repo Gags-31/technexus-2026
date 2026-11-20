@@ -9,9 +9,10 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
 from ..models import (
-    AuditLog, CompetitionRound, Question, Team, TeamRoundSession, utcnow,
+    AnswerHistory, AuditLog, CompetitionRound, Question, RiddleAttempt, Score,
+    Team, TeamAnswer, TeamRoundSession, Violation, utcnow,
 )
-from .core import audit, complete_session, round_summary, settings_map
+from .core import audit, complete_session, round_summary, set_setting, settings_map
 
 
 class RoundError(HTTPException):
@@ -46,6 +47,50 @@ def round_with_counts(db: Session, r: CompetitionRound) -> dict[str, Any]:
 def rounds_overview(db: Session) -> list[dict[str, Any]]:
     rounds = db.scalars(select(CompetitionRound).order_by(CompetitionRound.id)).all()
     return [round_with_counts(db, r) for r in rounds]
+
+
+def reset_event_state(db: Session, admin_id: int) -> dict[str, Any]:
+    """Return the event to a clean pre-competition state without deleting registrations.
+
+    Teams, participants, questions, riddles, memes, settings and audit history are
+    preserved. Runtime data (answers, scores, violations, break guesses and all
+    round clocks) is removed so the event can be run again from Round 1.
+    """
+    # Order matters: scores reference sessions and violations reference sessions.
+    for model in (
+        AnswerHistory, TeamAnswer, Score, Violation, RiddleAttempt, TeamRoundSession,
+    ):
+        db.query(model).delete(synchronize_session=False)
+
+    for r in db.scalars(select(CompetitionRound)):
+        r.status = "locked"
+        r.server_start_at = None
+        r.ends_at = None
+        r.paused_at = None
+        r.paused_seconds = 0
+        r.question_ids = []
+        r.started_by_id = None
+        r.ended_at = None
+
+    for team in db.scalars(select(Team)):
+        team.shortlisted = False
+
+    set_setting(db, "results_published", False, admin_id)
+    audit(
+        db, "event.reset", "administrator", admin_id,
+        "event", "all", {"rounds": 4, "scope": "runtime_state"},
+    )
+    db.commit()
+    return {"reset": True, "rounds": rounds_overview(db)}
+
+
+def restart_event(db: Session, admin_id: int) -> dict[str, Any]:
+    """Reset runtime state, then immediately launch Round 1 with a fresh clock."""
+    reset_event_state(db, admin_id)
+    state = start_round(db, 1, admin_id)
+    audit(db, "event.restarted", "administrator", admin_id, "event", "all", {"round_id": 1})
+    db.commit()
+    return state
 
 
 def pick_questions(db: Session, round_id: int, count: int) -> list[str]:

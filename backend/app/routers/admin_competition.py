@@ -16,7 +16,8 @@ from ..models import (
 from ..realtime import hub
 from ..services.core import audit, build_scoreboard, settings_map
 from ..services.rounds import (
-    end_round, pause_round, resume_round, rounds_overview, start_round,
+    end_round, pause_round, reset_event_state, restart_event, resume_round,
+    rounds_overview, start_round,
 )
 
 router = APIRouter(prefix="/api/admin", tags=["administrator"])
@@ -95,6 +96,41 @@ async def api_end_round(
     await hub.broadcast("round.changed", {"round": state}, channel="administrator")
     await hub.broadcast("scoreboard.updated", {"round_id": round_id}, channel="administrator")
     return state
+
+
+# --------------------------------------------------------------------------- event reset / restart
+@router.post("/event/reset")
+async def api_reset_event(
+    actor: Actor = Depends(require_full_admin), db: Session = Depends(get_db),
+):
+    """Clear all competition runtime data while keeping registrations and content."""
+    result = reset_event_state(db, actor.id)
+    await hub.broadcast("event.reset", {
+        "message": "The event has been reset by the organisers. Reloading the competition state.",
+    }, channel="participant")
+    await hub.broadcast("round.changed", {"rounds": result["rounds"]}, channel="administrator")
+    await hub.broadcast("scoreboard.updated", {}, channel="administrator")
+    return result
+
+
+@router.post("/event/restart")
+async def api_restart_event(
+    actor: Actor = Depends(require_full_admin), db: Session = Depends(get_db),
+):
+    """Reset runtime state and immediately start Round 1 from a fresh server clock."""
+    state = restart_event(db, actor.id)
+    await hub.broadcast("event.restarted", {
+        "message": "TECHNEXUS 2026 has restarted. Round 1 is now active.",
+    }, channel="participant")
+    await hub.broadcast("round.started", {
+        "round_id": state["id"], "name": state["name"],
+        "message": f"{state['name']} has started. Good luck!",
+    }, channel="participant")
+    await hub.broadcast("round.changed", {
+        "round": state, "rounds": rounds_overview(db),
+    }, channel="administrator")
+    await hub.broadcast("scoreboard.updated", {}, channel="administrator")
+    return {"restarted": True, "round": state}
 
 
 # --------------------------------------------------------------------------- scoreboard

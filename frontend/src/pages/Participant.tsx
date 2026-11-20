@@ -92,7 +92,7 @@ export default function ParticipantDashboard() {
 
   const onSocketEvent = useCallback((message: any) => {
     const { event, payload } = message
-    if (['round.started', 'round.paused', 'round.resumed', 'round.ended', 'results.published', 'team.reinstated', 'team.disqualified'].includes(event)) {
+    if (['round.started', 'round.paused', 'round.resumed', 'round.ended', 'results.published', 'team.reinstated', 'team.disqualified', 'event.reset', 'event.restarted'].includes(event)) {
       setToast(payload?.message || `Event: ${event.replace('.', ' ')}`)
       setTimeout(() => setToast(''), 5000)
       refreshState(); refreshMe()

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
-import { Download, Pause, Play, Radio, RefreshCw, Search, Square } from 'lucide-react'
+import { Download, Pause, Play, Radio, RefreshCw, RotateCcw, Search, Square } from 'lucide-react'
 import { StatusPill } from '../components/Brand'
 import { Panel, ConfirmDialog } from '../components/AdminParts'
 import { ApiError, downloadUrl, post } from '../lib/api'
@@ -12,7 +12,8 @@ export function RoundManagement({ data, reload, refreshAll }: any) {
   const run = async () => {
     setBusy(true); setError('')
     try {
-      await post(`/admin/rounds/${confirm.round.id}/${confirm.action}`, {})
+      if (confirm.event) await post(`/admin/event/${confirm.action}`, {})
+      else await post(`/admin/rounds/${confirm.round.id}/${confirm.action}`, {})
       setConfirm(null)
       await Promise.all([reload(), refreshAll()])
     } catch (err) {
@@ -20,7 +21,10 @@ export function RoundManagement({ data, reload, refreshAll }: any) {
       setConfirm(null)
     } finally { setBusy(false) }
   }
-  const labels: Record<string, string> = { start: 'START ROUND', pause: 'PAUSE ROUND', resume: 'RESUME ROUND', end: 'END ROUND' }
+  const labels: Record<string, string> = {
+    start: 'START ROUND', pause: 'PAUSE ROUND', resume: 'RESUME ROUND', end: 'END ROUND',
+    reset: 'RESET EVENT', restart: 'RESET & RESTART EVENT',
+  }
   const colors: Record<number, string> = {
     1: 'from-cyan/80 to-blue-500/20', 2: 'from-blue-400/80 to-violet-500/20',
     3: 'from-violet-400/80 to-fuchsia-500/20', 4: 'from-amber-300/80 to-rose-500/20',
@@ -28,6 +32,21 @@ export function RoundManagement({ data, reload, refreshAll }: any) {
   return (
     <>
       {error && <div className="mb-4 rounded-xl border border-rose-400/30 bg-rose-400/10 p-4 text-sm text-rose-300">{error}</div>}
+
+      <div className="glass mb-5 flex flex-wrap items-center justify-between gap-4 rounded-2xl p-5">
+        <div>
+          <p className="eyebrow mb-1">Event control</p>
+          <h3 className="display text-lg font-bold text-white">Reset or restart the whole event</h3>
+          <p className="mt-1 max-w-2xl text-xs text-slate-500">
+            Clears every round clock, answer, score, violation, break guess and shortlist flag. Teams, registrations, questions, settings and audit logs are kept.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button className="btn btn-danger" disabled={busy} onClick={() => setConfirm({ event: true, action: 'reset' })}><RotateCcw size={15} /> Reset event</button>
+          <button className="btn btn-primary" disabled={busy} onClick={() => setConfirm({ event: true, action: 'restart' })}><RotateCcw size={15} /> Reset & restart</button>
+        </div>
+      </div>
+
       <div className="grid gap-5 lg:grid-cols-2">
         {(data || []).map((r: any) => (
           <div key={r.id} className="glass relative overflow-hidden rounded-2xl p-6">
@@ -58,13 +77,17 @@ export function RoundManagement({ data, reload, refreshAll }: any) {
         ))}
       </div>
       <AnimatePresence>{confirm && <ConfirmDialog
-        title={`${labels[confirm.action]} — Round ${confirm.round.id}`}
-        body={confirm.action === 'start'
-          ? `This activates ${confirm.round.name} for all eligible teams at once using authoritative server time. Future rounds remain locked. Continue?`
-          : confirm.action === 'end'
-            ? 'This closes the round for every team and automatically submits all saved answers. Continue?'
-            : 'This applies globally to every connected team. Continue?'}
-        confirmLabel={labels[confirm.action]} danger={confirm.action === 'end'} onCancel={() => setConfirm(null)} onConfirm={run}
+        title={confirm.event ? labels[confirm.action] : `${labels[confirm.action]} — Round ${confirm.round.id}`}
+        body={confirm.event
+          ? confirm.action === 'restart'
+            ? 'This clears all competition progress and immediately starts Round 1 with a fresh server clock for every eligible team. This cannot be undone. Continue?'
+            : 'This clears all competition progress and locks every round. Teams can register again, but no round is active until you start one. This cannot be undone. Continue?'
+          : confirm.action === 'start'
+            ? `This activates ${confirm.round.name} for all eligible teams at once using authoritative server time. Future rounds remain locked. Continue?`
+            : confirm.action === 'end'
+              ? 'This closes the round for every team and automatically submits all saved answers. Continue?'
+              : 'This applies globally to every connected team. Continue?'}
+        confirmLabel={labels[confirm.action]} danger={confirm.event || confirm.action === 'end'} onCancel={() => setConfirm(null)} onConfirm={run}
       />}</AnimatePresence>
     </>
   )
