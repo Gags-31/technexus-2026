@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Activity, CheckCircle2, Clock, Gauge, Radio, RefreshCw, RotateCcw, Square, Trophy, Users, X } from 'lucide-react'
+import { AnimatePresence } from 'framer-motion'
+import { Activity, AlertTriangle, CheckCircle2, Clock, Gauge, Radio, RefreshCw, RotateCcw, Square, Trophy, Users, X } from 'lucide-react'
 import { StatusPill } from '../components/Brand'
-import { Panel, Stat } from '../components/AdminParts'
-import { patch, post } from '../lib/api'
+import { ConfirmDialog, Panel, Stat } from '../components/AdminParts'
+import { ApiError, patch, post } from '../lib/api'
 
 export function Overview({ data, reload }: any) {
   const totals = data?.totals || {}
@@ -71,33 +72,55 @@ export function Overview({ data, reload }: any) {
 
 export function Registrations({ data, reload }: any) {
   const [busy, setBusy] = useState<number | null>(null)
-  const act = async (id: number, decision: string) => {
-    setBusy(id)
-    try { await post(`/admin/registrations/${id}/${decision}`, { notes: '' }); await reload() }
-    finally { setBusy(null) }
+  const [error, setError] = useState('')
+  const [confirm, setConfirm] = useState<any>(null)
+  const act = async (id: number, decision: string, force = false) => {
+    setBusy(id); setError('')
+    try {
+      await post(`/admin/registrations/${id}/${decision}`, { notes: '', force })
+      setConfirm(null)
+      await reload()
+    } catch (err) {
+      setError(err instanceof ApiError ? err.detail : 'Registration action failed')
+      setConfirm(null)
+    } finally { setBusy(null) }
   }
   return (
-    <Panel title="Participant registrations" subtitle={`${data?.length || 0} applications · both members must confirm before approval`}
-      action={<button onClick={reload} className="btn btn-ghost px-3 py-2"><RefreshCw size={14} /> Refresh</button>}>
-      <div className="scroll-thin overflow-x-auto">
-        <table className="table-dark">
-          <thead><tr><th>Team</th><th>Institution</th><th>Members</th><th>Code</th><th>Decision</th><th>Action</th></tr></thead>
-          <tbody>{(data || []).map((team: any) => (
-            <tr key={team.id}>
-              <td><p className="font-semibold text-white">{team.name}</p><p className="font-mono text-[10px] text-cyan">{team.public_id}</p></td>
-              <td><p className="text-slate-300">{team.college}</p><p className="text-[11px] text-slate-500">{team.department} · Sem {team.semester}</p></td>
-              <td>{team.members.map((m: any) => <p key={m.id} className="text-xs text-slate-300">{m.full_name} <span className={m.confirmed ? 'text-emerald-400' : 'text-amber-400'}>{m.confirmed ? '✓' : 'pending'}</span></p>)}</td>
-              <td className="code-text text-xs text-cyan">{team.code?.value || '—'}</td>
-              <td><StatusPill status={team.decision || team.status} /></td>
-              <td><div className="flex gap-2">
-                <button disabled={busy === team.id || team.status === 'approved'} className="btn btn-primary px-3 py-1.5 text-[11px]" onClick={() => act(team.id, 'approve')}>Approve</button>
-                <button disabled={busy === team.id || team.status === 'rejected'} className="btn btn-danger px-3 py-1.5 text-[11px]" onClick={() => act(team.id, 'reject')}>Reject</button>
-              </div></td>
-            </tr>
-          ))}</tbody>
-        </table>
-      </div>
-    </Panel>
+    <>
+      {error && <div className="mb-4 rounded-xl border border-rose-400/30 bg-rose-400/10 p-4 text-sm text-rose-300">{error}</div>}
+      <Panel title="Participant registrations" subtitle={`${data?.length || 0} applications · organiser override available if a member has not confirmed`}
+        action={<button onClick={reload} className="btn btn-ghost px-3 py-2"><RefreshCw size={14} /> Refresh</button>}>
+        <div className="scroll-thin overflow-x-auto">
+          <table className="table-dark">
+            <thead><tr><th>Team</th><th>Institution</th><th>Members</th><th>Code</th><th>Decision</th><th>Action</th></tr></thead>
+            <tbody>{(data || []).map((team: any) => {
+              const approved = team.status === 'approved' || team.decision === 'approved'
+              const confirmed = team.members?.length === 2 && team.members.every((m: any) => m.confirmed)
+              return (
+                <tr key={team.id}>
+                  <td><p className="font-semibold text-white">{team.name}</p><p className="font-mono text-[10px] text-cyan">{team.public_id}</p></td>
+                  <td><p className="text-slate-300">{team.college}</p><p className="text-[11px] text-slate-500">{team.department} · Sem {team.semester}</p></td>
+                  <td>{team.members.map((m: any) => <p key={m.id} className="text-xs text-slate-300">{m.full_name} <span className={m.confirmed ? 'text-emerald-400' : 'text-amber-400'}>{m.confirmed ? '✓' : 'pending'}</span></p>)}</td>
+                  <td className="code-text text-xs text-cyan">{team.code?.value || '—'}</td>
+                  <td><StatusPill status={team.decision || team.status} /></td>
+                  <td><div className="flex flex-wrap gap-2">
+                    <button disabled={busy === team.id || approved || !confirmed} className="btn btn-primary px-3 py-1.5 text-[11px]" onClick={() => act(team.id, 'approve')}>Approve</button>
+                    {!approved && !confirmed && <button disabled={busy === team.id} className="btn btn-ghost px-3 py-1.5 text-[11px] text-amber-300" onClick={() => setConfirm(team)}><AlertTriangle size={12} /> Approve anyway</button>}
+                    <button disabled={busy === team.id || team.status === 'rejected'} className="btn btn-danger px-3 py-1.5 text-[11px]" onClick={() => act(team.id, 'reject')}>Reject</button>
+                  </div></td>
+                </tr>
+              )
+            })}</tbody>
+          </table>
+        </div>
+      </Panel>
+      <AnimatePresence>{confirm && <ConfirmDialog
+        title="Override member confirmation"
+        body={`${confirm.name} has ${confirm.members.filter((m: any) => !m.confirmed).length} member(s) who have not confirmed participation. Approving anyway will mark them confirmed and approve the team. Continue?`}
+        confirmLabel="APPROVE ANYWAY" danger onCancel={() => setConfirm(null)}
+        onConfirm={() => act(confirm.id, 'approve', true)}
+      />}</AnimatePresence>
+    </>
   )
 }
 

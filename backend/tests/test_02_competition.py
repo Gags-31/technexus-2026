@@ -7,7 +7,7 @@ from app.models import (
     AnswerHistory, Riddle, RiddleAttempt, Score, Team, TeamAnswer,
     TeamRoundSession, Violation,
 )
-from tests.harness import STATE, SessionLocal, api
+from tests.harness import STATE, SessionLocal, api, team_payload
 
 
 def _team(label: str) -> dict:
@@ -248,3 +248,25 @@ def test_30_restart_event_starts_round_one_with_a_fresh_clock():
     participant_state = _participant("alpha", "leader").get("/api/participant/state").json()
     assert participant_state["active_round"]["id"] == 1
     assert "event.restarted" in {row["action"] for row in admin.get("/api/admin/audit-logs").json()}
+
+
+def test_31_organiser_can_override_missing_member_confirmations():
+    admin = _admin()
+    response = api().post("/api/registration", json=team_payload("Override", 7))
+    assert response.status_code == 201, response.text
+    team = response.json()["team"]
+    assert team["status"] == "pending"
+
+    blocked = admin.post(f"/api/admin/registrations/{team['id']}/approve", json={"notes": ""})
+    assert blocked.status_code == 409
+    assert "confirm" in blocked.json()["detail"].lower()
+
+    approved = admin.post(
+        f"/api/admin/registrations/{team['id']}/approve",
+        json={"notes": "Verified manually", "force": True},
+    )
+    assert approved.status_code == 200, approved.text
+    payload = approved.json()
+    assert payload["status"] == "approved"
+    assert len(payload["members"]) == 2 and all(m["confirmed"] for m in payload["members"])
+    assert "registration.admin_confirmed" in {row["action"] for row in admin.get("/api/admin/audit-logs").json()}

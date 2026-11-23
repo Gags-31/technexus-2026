@@ -77,6 +77,7 @@ def registrations(db: Session = Depends(get_db), _: Actor = Depends(require_full
 
 class Decision(BaseModel):
     notes: str = Field(default="", max_length=500)
+    force: bool = False
 
 
 @router.post("/registrations/{team_id}/approve")
@@ -87,8 +88,19 @@ async def approve_registration(
     team = db.get(Team, team_id)
     if not team:
         raise HTTPException(status_code=404, detail="Team not found")
-    if not all(p.confirmed_at for p in team.members) or len(team.members) != 2:
-        raise HTTPException(status_code=409, detail="Both members must confirm before approval")
+    if len(team.members) != 2:
+        raise HTTPException(status_code=409, detail="A team must have exactly two members before approval")
+    if not all(p.confirmed_at for p in team.members):
+        if not payload.force:
+            raise HTTPException(
+                status_code=409,
+                detail="Both members must confirm before approval. Use the organiser override to approve anyway.",
+            )
+        for participant in team.members:
+            if not participant.confirmed_at:
+                participant.confirmed_at = utcnow()
+        audit(db, "registration.admin_confirmed", "administrator", actor.id, "team", team_id,
+              {"members": len(team.members)})
     team.status = "approved"
     team.approved_at = utcnow()
     team.approved_by_id = actor.id
