@@ -13,7 +13,7 @@
 Live totals for teams, participants, approvals, active sessions, violations and WebSocket connections; current competition status; event configuration; round snapshot; editable schedule reference.
 
 ### Participant Registrations
-Review every application. Each team must contain exactly one Leader and one Member and **both must have confirmed** before the Approve button becomes valid. Use Reject with a note where needed. Decisions are audit-logged and broadcast as announcements.
+Review every application. Each team must contain exactly one Leader and one Member and **both must have confirmed** before the Approve button becomes valid. If a participant could not complete confirmation, use **Approve anyway** as the organiser override; it marks both members confirmed, approves the team and records an audit entry. Use Reject with a note where needed. Decisions are audit-logged and broadcast as announcements.
 
 ### Team Management
 View team IDs, institutions, members and unique `TNX-...` codes. Use:
